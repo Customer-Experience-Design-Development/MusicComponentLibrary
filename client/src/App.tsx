@@ -9,6 +9,7 @@ import Home from "@/pages/home";
 import ComponentsIndex from "@/pages/components/index";
 import AudioPlayerPage from "@/pages/components/audio-player";
 import Documentation from "@/pages/documentation";
+import DesignSystem from "@/pages/design-system";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -18,6 +19,7 @@ function Router() {
       <Route path="/components" component={ComponentsIndex} />
       <Route path="/components/audio-player" component={AudioPlayerPage} />
       <Route path="/documentation" component={Documentation} />
+      <Route path="/design-system" component={DesignSystem} />
       {/* Fallback to 404 */}
       <Route component={NotFound} />
     </Switch>

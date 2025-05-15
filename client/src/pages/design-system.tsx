@@ -8,29 +8,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import ReactMarkdown from 'react-markdown';
 
-// Import documentation markdown files (these will be fetched at runtime)
-import DocsIndex from '../docs/index.md?raw';
-import PersonasDoc from '../docs/personas.md?raw';
-import ComponentCategoriesDoc from '../docs/component-categories.md?raw';
-import SpecializedThemesDoc from '../docs/specialized-themes.md?raw';
-import VisualizationEnhancementsDoc from '../docs/visualization-enhancements.md?raw';
-
 export default function DesignSystem() {
-  const [activeDocContent, setActiveDocContent] = useState(DocsIndex);
-  const [activeDoc, setActiveDoc] = useState('index');
+  const [activeSection, setActiveSection] = useState('overview');
 
-  // Documentation mapping
-  const docs = {
-    index: DocsIndex,
-    personas: PersonasDoc,
-    'component-categories': ComponentCategoriesDoc,
-    'specialized-themes': SpecializedThemesDoc,
-    'visualization-enhancements': VisualizationEnhancementsDoc
-  };
-
-  const handleDocChange = (docName: string) => {
-    setActiveDoc(docName);
-    setActiveDocContent(docs[docName]);
+  const handleSectionChange = (section: string) => {
+    setActiveSection(section);
   };
 
   // Sample data for the sidebar
