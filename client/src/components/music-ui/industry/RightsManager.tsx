@@ -3,26 +3,30 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { 
-  Badge, 
   Tooltip, 
   TooltipContent, 
   TooltipProvider, 
-  TooltipTrigger,
+  TooltipTrigger 
+} from '@/components/ui/tooltip';
+import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
   DialogDescription,
-  DialogFooter,
+  DialogFooter
+} from '@/components/ui/dialog';
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuLabel,
   DropdownMenuSeparator
-} from '@/components/ui';
+} from '@/components/ui/dropdown-menu';
 import { Copy, Download, Filter, MoreHorizontal, PlusCircle, Share2, Shield, ShieldCheck, ShieldOff } from 'lucide-react';
 
 interface RightHolder {

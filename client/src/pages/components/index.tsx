@@ -23,6 +23,7 @@ export default function ComponentsIndex() {
     {
       title: "Components",
       links: [
+        { title: "Component Showcase", path: "/components/showcase", active: true },
         { title: "Audio Player", path: "/components/audio-player" },
         { title: "Playlist", path: "/components/playlist" },
         { title: "Visualizer", path: "/components/visualizer" },
@@ -157,6 +158,20 @@ export default function ComponentsIndex() {
                 </div>
               </section>
             ))}
+            
+            <div className="bg-primary/5 dark:bg-primary/10 rounded-lg p-5 mt-8 mb-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+              <div>
+                <h3 className="font-bold text-lg">Component Showcase</h3>
+                <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                  See all our components in action with interactive examples.
+                </p>
+              </div>
+              <Link href="/components/showcase">
+                <Button className="whitespace-nowrap">
+                  View Showcase
+                </Button>
+              </Link>
+            </div>
             
             <div className="bg-neutral-50 dark:bg-neutral-800/50 rounded-lg p-5 mt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
               <div>
