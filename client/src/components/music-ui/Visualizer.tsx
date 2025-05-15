@@ -258,9 +258,15 @@ export function Visualizer({
     
     // Create gradient for wave
     const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
-    colorPalette.forEach((color, index) => {
-      gradient.addColorStop(index / (colorPalette.length - 1), color);
-    });
+    if (colorPalette.length === 1) {
+      gradient.addColorStop(0, colorPalette[0]);
+      gradient.addColorStop(1, colorPalette[0]);
+    } else {
+      colorPalette.forEach((color, index) => {
+        const position = colorPalette.length === 1 ? 0.5 : index / Math.max(1, (colorPalette.length - 1));
+        gradient.addColorStop(position, color);
+      });
+    }
     
     ctx.strokeStyle = gradient;
     ctx.lineWidth = 3;

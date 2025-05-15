@@ -40,7 +40,7 @@ export function CanvasEqualizer({
   width = 200,
   barWidth = 4,
   barGap = 2,
-  barColor = 'hsl(var(--primary))',
+  barColor = '#6200EA', // Explicit hex color instead of CSS variable
   isActive = true,
   className = ''
 }: CanvasEqualizerProps) {

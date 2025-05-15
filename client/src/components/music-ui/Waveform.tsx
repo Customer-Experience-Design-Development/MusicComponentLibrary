@@ -15,8 +15,8 @@ export function Waveform({
   data, 
   currentTime, 
   duration, 
-  color = 'hsl(var(--primary))', 
-  progressColor = 'hsl(var(--primary))',
+  color = '#6200EA', // Explicit hex color instead of CSS variable
+  progressColor = '#6200EA', // Explicit hex color instead of CSS variable
   height = 64, 
   onClick,
   className = ''
