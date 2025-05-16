@@ -22,15 +22,15 @@ export function Sidebar({ categories }: SidebarProps) {
                 return (
                   <li key={linkIndex}>
                     <Link href={link.path}>
-                      <a
-                        className={`flex items-center text-sm px-3 py-2 rounded-md transition ${
+                      <div
+                        className={`flex items-center text-sm px-3 py-2 rounded-md transition cursor-pointer ${
                           isActive
                             ? "font-medium text-primary bg-primary/5"
                             : "hover:text-primary"
                         }`}
                       >
                         {link.title}
-                      </a>
+                      </div>
                     </Link>
                   </li>
                 );

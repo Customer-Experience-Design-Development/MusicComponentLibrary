@@ -3,13 +3,25 @@ import { Sidebar } from '@/components/Sidebar';
 import { PageHeader } from '@/components/PageHeader';
 import { Footer } from '@/components/Footer';
 import { NavCategory } from '@/types/music';
-import { Card, CardContent, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Link } from 'wouter';
+import {
+  CircleDollarSign,
+  Music2,
+  BarChart3,
+  BookOpen,
+  BookText,
+  Radio,
+  Disc,
+  LayoutGrid,
+  Activity,
+  Volume2,
+  SlidersHorizontal,
+  ArrowRight,
+} from 'lucide-react';
 
 export default function ComponentsIndex() {
-  // Sample data for the sidebar
+  // Sidebar categories
   const sidebarCategories: NavCategory[] = [
     {
       title: "Getting Started",
@@ -23,7 +35,8 @@ export default function ComponentsIndex() {
     {
       title: "Components",
       links: [
-        { title: "Component Showcase", path: "/components/showcase", active: true },
+        { title: "Overview", path: "/components", active: true },
+        { title: "Component Showcase", path: "/components/showcase" },
         { title: "Audio Player", path: "/components/audio-player" },
         { title: "Playlist", path: "/components/playlist" },
         { title: "Visualizer", path: "/components/visualizer" },
@@ -60,8 +73,7 @@ export default function ComponentsIndex() {
       links: [
         { label: "GitHub", href: "https://github.com/musicui" },
         { label: "Discord", href: "https://discord.gg/musicui" },
-        { label: "Twitter", href: "https://twitter.com/musicui" },
-        { label: "Stack Overflow", href: "https://stackoverflow.com/questions/tagged/musicui" }
+        { label: "Twitter", href: "https://twitter.com/musicui" }
       ]
     },
     {
@@ -82,39 +94,67 @@ export default function ComponentsIndex() {
   ];
 
   // Component categories
-  const components = [
+  const componentCategories = [
     {
-      category: "Players",
-      items: [
-        { name: "Audio Player", path: "/components/audio-player", icon: "ri-play-circle-line" },
-        { name: "Mini Player", path: "/components/mini-player", icon: "ri-play-mini-line" },
-        { name: "Playlist", path: "/components/playlist", icon: "ri-list-check" },
-      ],
+      title: "Core Audio",
+      description: "Essential components for audio playback and control",
+      icon: <Music2 className="h-8 w-8 text-primary" />,
+      components: [
+        { name: "Audio Player", path: "/components/audio-player", description: "Full-featured audio player with waveform visualization" },
+        { name: "Mini Player", path: "/components/mini-player", description: "Compact audio player for space-constrained UIs" },
+        { name: "Volume Control", path: "/components/volume-control", description: "Audio volume adjustment with visual feedback" },
+      ]
     },
     {
-      category: "Visualizations",
-      items: [
-        { name: "Visualizer", path: "/components/visualizer", icon: "ri-bar-chart-box-line" },
-        { name: "Waveform", path: "/components/waveform", icon: "ri-sound-module-line" },
-        { name: "Equalizer", path: "/components/equalizer", icon: "ri-equalizer-line" },
-      ],
+      title: "Visualization",
+      description: "Components for visualizing audio data and music",
+      icon: <Activity className="h-8 w-8 text-primary" />,
+      components: [
+        { name: "Visualizer", path: "/components/visualizer", description: "Real-time audio visualization with multiple styles" },
+        { name: "Waveform", path: "/components/waveform", description: "Static and interactive audio waveform display" },
+        { name: "Equalizer", path: "/components/equalizer", description: "Visual representation of audio frequencies" },
+      ]
     },
     {
-      category: "Controls",
-      items: [
-        { name: "Volume Control", path: "/components/volume-control", icon: "ri-volume-up-line" },
-        { name: "Transport Controls", path: "/components/transport-controls", icon: "ri-skip-forward-line" },
-        { name: "Seek Bar", path: "/components/seek-bar", icon: "ri-drag-move-line" },
-      ],
+      title: "Collection Management",
+      description: "Components for organizing and displaying music collections",
+      icon: <LayoutGrid className="h-8 w-8 text-primary" />,
+      components: [
+        { name: "Album Grid", path: "/components/album-grid", description: "Grid-based display for album collections" },
+        { name: "Playlist", path: "/components/playlist", description: "Ordered list of tracks with playback controls" },
+        { name: "Media Card", path: "/components/media-card", description: "Display card for individual tracks or albums" },
+      ]
     },
     {
-      category: "Content",
-      items: [
-        { name: "Media Card", path: "/components/media-card", icon: "ri-album-line" },
-        { name: "Artist Profile", path: "/components/artist-profile", icon: "ri-user-star-line" },
-        { name: "Track List", path: "/components/track-list", icon: "ri-file-music-line" },
-      ],
+      title: "Artist Tools",
+      description: "Components for artists to monitor and manage their music",
+      icon: <BarChart3 className="h-8 w-8 text-primary" />,
+      components: [
+        { name: "Performance Chart", path: "/components/performance-chart", description: "Data visualization for streaming and engagement metrics" },
+        { name: "Release Calendar", path: "/components/release-calendar", description: "Planning and scheduling tool for music releases" },
+        { name: "Audience Map", path: "/components/audience-map", description: "Geographic visualization of listener distribution" },
+      ]
     },
+    {
+      title: "Education",
+      description: "Components for music education and theory",
+      icon: <BookOpen className="h-8 w-8 text-primary" />,
+      components: [
+        { name: "Theory Visualizer", path: "/components/theory-visualizer", description: "Interactive visualization of music theory concepts" },
+        { name: "Practice Timer", path: "/components/practice-timer", description: "Specialized timer for music practice sessions" },
+        { name: "Notation Display", path: "/components/notation-display", description: "Sheet music and notation rendering" },
+      ]
+    },
+    {
+      title: "Industry",
+      description: "Components for music industry professionals",
+      icon: <CircleDollarSign className="h-8 w-8 text-primary" />,
+      components: [
+        { name: "Rights Manager", path: "/components/rights-manager", description: "Interface for managing music rights and licensing" },
+        { name: "Contract Viewer", path: "/components/contract-viewer", description: "Specialized document viewer for music contracts" },
+        { name: "Royalty Calculator", path: "/components/royalty-calculator", description: "Tool for calculating and visualizing royalty splits" },
+      ]
+    }
   ];
 
   return (
@@ -128,61 +168,45 @@ export default function ComponentsIndex() {
           <main className="col-span-12 lg:col-span-9">
             <PageHeader 
               title="Components" 
-              description="Explore our comprehensive library of music-specific UI components designed for cross-platform compatibility."
+              description="Explore our comprehensive library of UI components designed specifically for music applications."
             />
             
-            {components.map((category, index) => (
-              <section key={index} className="mb-10">
-                <h2 className="text-xl font-bold mb-5">{category.category}</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {category.items.map((component, compIndex) => (
-                    <Link key={compIndex} href={component.path}>
-                      <a>
-                        <Card className="hover:shadow-md transition-shadow">
-                          <CardContent className="p-5">
-                            <div className="flex justify-between items-start">
-                              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center mb-3">
-                                <i className={`${component.icon} text-xl text-primary`}></i>
-                              </div>
-                              <ArrowRight className="h-4 w-4 text-neutral-400" />
+            <div className="mt-8 space-y-10">
+              {componentCategories.map((category, i) => (
+                <div key={i}>
+                  <div className="flex items-start mb-4">
+                    <div className="mr-4 p-2 bg-primary/10 rounded-lg">
+                      {category.icon}
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold">{category.title}</h2>
+                      <p className="text-muted-foreground">{category.description}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {category.components.map((component, j) => (
+                      <Link key={j} href={component.path}>
+                        <Card className="h-full cursor-pointer hover:border-primary transition-colors group">
+                          <CardHeader className="pb-2">
+                            <CardTitle className="text-xl group-hover:text-primary transition-colors">
+                              {component.name}
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <CardDescription className="text-sm">
+                              {component.description}
+                            </CardDescription>
+                            <div className="mt-4 text-primary text-sm font-medium flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
+                              View component <ArrowRight className="ml-1 h-4 w-4" />
                             </div>
-                            <CardTitle className="text-base mb-1">{component.name}</CardTitle>
-                            <p className="text-xs text-muted-foreground">
-                              View documentation and examples
-                            </p>
                           </CardContent>
                         </Card>
-                      </a>
-                    </Link>
-                  ))}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-              </section>
-            ))}
-            
-            <div className="bg-primary/5 dark:bg-primary/10 rounded-lg p-5 mt-8 mb-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-              <div>
-                <h3 className="font-bold text-lg">Component Showcase</h3>
-                <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                  See all our components in action with interactive examples.
-                </p>
-              </div>
-              <Link href="/components/showcase">
-                <Button className="whitespace-nowrap">
-                  View Showcase
-                </Button>
-              </Link>
-            </div>
-            
-            <div className="bg-neutral-50 dark:bg-neutral-800/50 rounded-lg p-5 mt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-              <div>
-                <h3 className="font-bold text-lg">Need a custom component?</h3>
-                <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                  Contact us to discuss creating custom components for your specific needs.
-                </p>
-              </div>
-              <Button className="whitespace-nowrap">
-                Request Component
-              </Button>
+              ))}
             </div>
           </main>
         </div>

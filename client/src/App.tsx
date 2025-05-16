@@ -9,6 +9,7 @@ import Home from "@/pages/home";
 import ComponentsIndex from "@/pages/components/index";
 import AudioPlayerPage from "@/pages/components/audio-player";
 import ComponentShowcase from "@/pages/components/showcase";
+import PlaylistPage from "@/pages/components/playlist";
 import Documentation from "@/pages/documentation";
 import DesignSystem from "@/pages/design-system";
 import PlatformsPage from "@/pages/resources/platforms";
@@ -22,7 +23,7 @@ function Router() {
       <Route path="/components" component={ComponentsIndex} />
       <Route path="/components/audio-player" component={AudioPlayerPage} />
       <Route path="/components/showcase" component={ComponentShowcase} />
-      <Route path="/components/playlist" component={ComponentsIndex} />
+      <Route path="/components/playlist" component={PlaylistPage} />
       <Route path="/components/visualizer" component={ComponentsIndex} />
       <Route path="/components/waveform" component={ComponentsIndex} />
       <Route path="/components/volume-control" component={ComponentsIndex} />

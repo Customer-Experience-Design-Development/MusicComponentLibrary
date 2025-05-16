@@ -1,17 +1,63 @@
-import { useState } from 'react';
 import { AppHeader } from '@/components/AppHeader';
 import { Sidebar } from '@/components/Sidebar';
 import { PageHeader } from '@/components/PageHeader';
 import { Footer } from '@/components/Footer';
 import { NavCategory } from '@/types/music';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { Playlist } from '@/components/music-ui';
-import { Link } from 'wouter';
+import { Playlist } from '@/components/music-ui/Playlist';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function PlaylistPage() {
-  // Sample data for the sidebar
+  // Sample tracks for demo
+  const tracks = [
+    {
+      id: 1,
+      title: "Starlight Melody",
+      artist: "Cosmic Dreams",
+      duration: 237, // 3:57
+      albumArt: "https://placehold.co/200x200/4F46E5/FFFFFF/png?text=Cosmic+Dreams",
+      audioSrc: "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Tours/Enthusiast/Tours_-_01_-_Enthusiast.mp3",
+      waveformData: "0.1,0.15,0.2,0.15,0.15,0.11,0.125,0.15,0.175,0.2,0.23,0.25,0.26,0.24,0.23,0.22,0.21,0.2,0.18,0.16,0.14,0.126,0.125,0.12,0.135,0.15"
+    },
+    {
+      id: 2,
+      title: "Ocean Waves",
+      artist: "Ambient Shores",
+      duration: 184, // 3:04
+      albumArt: "https://placehold.co/200x200/16A34A/FFFFFF/png?text=Ambient+Shores",
+      audioSrc: "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Chad_Crouch/Arps/Chad_Crouch_-_Shipping_Lanes.mp3",
+      waveformData: "0.15,0.16,0.17,0.18,0.19,0.17,0.16,0.15,0.14,0.13,0.15,0.17,0.19,0.2,0.21,0.20,0.19,0.18,0.17,0.16,0.15,0.14,0.15,0.16,0.17,0.18"
+    },
+    {
+      id: 3,
+      title: "Midnight Jazz",
+      artist: "Urban Quartet",
+      duration: 312, // 5:12
+      albumArt: "https://placehold.co/200x200/CA8A04/FFFFFF/png?text=Urban+Quartet",
+      audioSrc: "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Chad_Crouch/Arps/Chad_Crouch_-_Shipping_Lanes.mp3",
+      waveformData: "0.12,0.13,0.14,0.15,0.16,0.17,0.18,0.19,0.2,0.21,0.22,0.21,0.2,0.19,0.18,0.17,0.18,0.19,0.2,0.21,0.22,0.23,0.22,0.21,0.2,0.19"
+    },
+    {
+      id: 4,
+      title: "Electric Dreams",
+      artist: "Synthwave Collective",
+      duration: 263, // 4:23
+      albumArt: "https://placehold.co/200x200/DC2626/FFFFFF/png?text=Synthwave",
+      audioSrc: "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Chad_Crouch/Arps/Chad_Crouch_-_Shipping_Lanes.mp3",
+      waveformData: "0.2,0.25,0.3,0.35,0.3,0.25,0.2,0.15,0.1,0.15,0.2,0.25,0.3,0.35,0.3,0.25,0.2,0.15,0.1,0.15,0.2,0.25,0.3,0.25,0.2,0.15"
+    },
+    {
+      id: 5,
+      title: "Mountain Echo",
+      artist: "Wilderness Sound",
+      duration: 198, // 3:18
+      albumArt: "https://placehold.co/200x200/7E22CE/FFFFFF/png?text=Wilderness",
+      audioSrc: "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Chad_Crouch/Arps/Chad_Crouch_-_Shipping_Lanes.mp3",
+      waveformData: "0.1,0.12,0.14,0.16,0.18,0.2,0.22,0.24,0.26,0.24,0.22,0.2,0.18,0.16,0.14,0.12,0.1,0.12,0.14,0.16,0.18,0.2,0.18,0.16,0.14,0.12"
+    }
+  ];
+
+  // Sidebar categories
   const sidebarCategories: NavCategory[] = [
     {
       title: "Getting Started",
@@ -25,6 +71,7 @@ export default function PlaylistPage() {
     {
       title: "Components",
       links: [
+        { title: "Overview", path: "/components" },
         { title: "Component Showcase", path: "/components/showcase" },
         { title: "Audio Player", path: "/components/audio-player" },
         { title: "Playlist", path: "/components/playlist", active: true },
@@ -82,36 +129,6 @@ export default function PlaylistPage() {
     { icon: "ri-discord-fill", href: "https://discord.gg/musicui" }
   ];
 
-  // Sample tracks
-  const tracks = [
-    {
-      id: 1,
-      title: "Midnight Groove",
-      artist: "The Sound Collective",
-      duration: 196,
-      albumArt: "https://picsum.photos/seed/track1/200/200",
-      audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
-    },
-    {
-      id: 2,
-      title: "Urban Rhythm",
-      artist: "Echo Chamber",
-      duration: 248,
-      albumArt: "https://picsum.photos/seed/track2/200/200",
-      audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
-    },
-    {
-      id: 3,
-      title: "Electric Dreams",
-      artist: "Neon Pulse",
-      duration: 221,
-      albumArt: "https://picsum.photos/seed/track3/200/200",
-      audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
-    }
-  ];
-
-  const [selectedTrackId, setSelectedTrackId] = useState<number | undefined>(undefined);
-
   return (
     <div className="min-h-screen">
       <AppHeader />
@@ -123,199 +140,189 @@ export default function PlaylistPage() {
           <main className="col-span-12 lg:col-span-9">
             <PageHeader 
               title="Playlist Component" 
-              description="A comprehensive playlist component for music applications."
+              description="Display and manage collections of tracks with playback controls."
             />
             
-            <Tabs defaultValue="overview" className="mt-6">
+            <Tabs defaultValue="preview" className="mt-6">
               <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="api">API</TabsTrigger>
-                <TabsTrigger value="examples">Examples</TabsTrigger>
+                <TabsTrigger value="preview">Preview</TabsTrigger>
+                <TabsTrigger value="documentation">Documentation</TabsTrigger>
+                <TabsTrigger value="code">Code</TabsTrigger>
               </TabsList>
               
-              <TabsContent value="overview" className="space-y-4 mt-6">
+              <TabsContent value="preview" className="p-0 mt-6">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Playlist</CardTitle>
+                    <CardTitle>Playlist Demo</CardTitle>
                     <CardDescription>
-                      A component for displaying and managing lists of audio tracks with playback controls.
+                      Interactive demo of the Playlist component with full functionality.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="md:flex md:justify-between md:space-x-4">
-                      <div className="md:flex-1">
-                        <h3 className="text-lg font-medium mb-2">Features</h3>
-                        <ul className="list-disc pl-5 space-y-1">
-                          <li>Display track information including title, artist, duration</li>
-                          <li>Track selection</li>
-                          <li>Visual feedback for currently playing track</li>
-                          <li>Track controls (play, pause, next, previous)</li>
-                          <li>Supports custom theme styling</li>
-                          <li>Fully responsive design</li>
-                        </ul>
-                      </div>
-                      <div className="md:flex-1 mt-4 md:mt-0">
-                        <h3 className="text-lg font-medium mb-2">Use Cases</h3>
-                        <ul className="list-disc pl-5 space-y-1">
-                          <li>Music streaming applications</li>
-                          <li>Artist websites to showcase songs</li>
-                          <li>Music education platforms</li>
-                          <li>Podcast applications</li>
-                          <li>Any audio content management UI</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Installation</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="bg-neutral-100 dark:bg-neutral-800 rounded-md p-4">
-                      <code className="text-sm">npm install music-ui</code>
-                    </div>
-                    <div className="mt-4 bg-neutral-100 dark:bg-neutral-800 rounded-md p-4">
-                      <code className="text-sm">
-                        {`import { Playlist } from 'music-ui';`}
-                      </code>
+                  <CardContent className="p-6">
+                    <div className="max-w-2xl mx-auto">
+                      <Playlist 
+                        tracks={tracks}
+                        selectedTrackId={2}
+                        onSelect={(track) => console.log('Selected track:', track)}
+                        onShuffle={() => console.log('Shuffle clicked')}
+                        onRepeat={() => console.log('Repeat clicked')}
+                        onAddTrack={() => console.log('Add track clicked')}
+                        onDownload={() => console.log('Download clicked')}
+                      />
                     </div>
                   </CardContent>
                 </Card>
               </TabsContent>
               
-              <TabsContent value="api" className="space-y-4 mt-6">
+              <TabsContent value="documentation" className="mt-6">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Properties</CardTitle>
+                    <CardTitle>Documentation</CardTitle>
+                    <CardDescription>
+                      Learn how to use the Playlist component in your applications.
+                    </CardDescription>
                   </CardHeader>
-                  <CardContent>
-                    <div className="overflow-x-auto">
-                      <table className="w-full border-collapse">
-                        <thead>
-                          <tr className="border-b">
-                            <th className="text-left py-2 font-medium">Property</th>
-                            <th className="text-left py-2 font-medium">Type</th>
-                            <th className="text-left py-2 font-medium">Default</th>
-                            <th className="text-left py-2 font-medium">Description</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr className="border-b">
-                            <td className="py-2 font-mono text-sm">tracks</td>
-                            <td className="py-2 font-mono text-sm">Track[]</td>
-                            <td className="py-2 font-mono text-sm">Required</td>
-                            <td className="py-2">Array of track objects to display in the playlist</td>
-                          </tr>
-                          <tr className="border-b">
-                            <td className="py-2 font-mono text-sm">selectedTrackId</td>
-                            <td className="py-2 font-mono text-sm">number | undefined</td>
-                            <td className="py-2 font-mono text-sm">undefined</td>
-                            <td className="py-2">ID of the currently selected track</td>
-                          </tr>
-                          <tr className="border-b">
-                            <td className="py-2 font-mono text-sm">onSelect</td>
-                            <td className="py-2 font-mono text-sm">{`(track: Track) => void`}</td>
-                            <td className="py-2 font-mono text-sm">undefined</td>
-                            <td className="py-2">Callback when a track is selected</td>
-                          </tr>
-                          <tr className="border-b">
-                            <td className="py-2 font-mono text-sm">onShuffle</td>
-                            <td className="py-2 font-mono text-sm">{`() => void`}</td>
-                            <td className="py-2 font-mono text-sm">undefined</td>
-                            <td className="py-2">Callback when shuffle button is clicked</td>
-                          </tr>
-                          <tr className="border-b">
-                            <td className="py-2 font-mono text-sm">onRepeat</td>
-                            <td className="py-2 font-mono text-sm">{`() => void`}</td>
-                            <td className="py-2 font-mono text-sm">undefined</td>
-                            <td className="py-2">Callback when repeat button is clicked</td>
-                          </tr>
-                          <tr>
-                            <td className="py-2 font-mono text-sm">className</td>
-                            <td className="py-2 font-mono text-sm">string</td>
-                            <td className="py-2 font-mono text-sm">''</td>
-                            <td className="py-2">Additional CSS class names</td>
-                          </tr>
-                        </tbody>
-                      </table>
+                  <CardContent className="p-6 space-y-6">
+                    <div>
+                      <h3 className="text-lg font-medium mb-2">Overview</h3>
+                      <p className="text-muted-foreground">
+                        The Playlist component provides a comprehensive interface for displaying and interacting with 
+                        collections of tracks. It supports track selection, reordering, shuffling, and more.
+                      </p>
                     </div>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Track Object Properties</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="overflow-x-auto">
-                      <table className="w-full border-collapse">
-                        <thead>
-                          <tr className="border-b">
-                            <th className="text-left py-2 font-medium">Property</th>
-                            <th className="text-left py-2 font-medium">Type</th>
-                            <th className="text-left py-2 font-medium">Description</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr className="border-b">
-                            <td className="py-2 font-mono text-sm">id</td>
-                            <td className="py-2 font-mono text-sm">number</td>
-                            <td className="py-2">Unique identifier for the track</td>
-                          </tr>
-                          <tr className="border-b">
-                            <td className="py-2 font-mono text-sm">title</td>
-                            <td className="py-2 font-mono text-sm">string</td>
-                            <td className="py-2">Title of the track</td>
-                          </tr>
-                          <tr className="border-b">
-                            <td className="py-2 font-mono text-sm">artist</td>
-                            <td className="py-2 font-mono text-sm">string</td>
-                            <td className="py-2">Artist name</td>
-                          </tr>
-                          <tr className="border-b">
-                            <td className="py-2 font-mono text-sm">duration</td>
-                            <td className="py-2 font-mono text-sm">number</td>
-                            <td className="py-2">Duration in seconds</td>
-                          </tr>
-                          <tr className="border-b">
-                            <td className="py-2 font-mono text-sm">albumArt</td>
-                            <td className="py-2 font-mono text-sm">string | undefined</td>
-                            <td className="py-2">URL to album artwork image</td>
-                          </tr>
-                          <tr>
-                            <td className="py-2 font-mono text-sm">audioSrc</td>
-                            <td className="py-2 font-mono text-sm">string | undefined</td>
-                            <td className="py-2">URL to audio file</td>
-                          </tr>
-                        </tbody>
-                      </table>
+                    
+                    <div>
+                      <h3 className="text-lg font-medium mb-2">Props</h3>
+                      <div className="border rounded-md divide-y">
+                        <div className="grid grid-cols-3 p-3">
+                          <div className="font-medium">Name</div>
+                          <div className="font-medium">Type</div>
+                          <div className="font-medium">Description</div>
+                        </div>
+                        <div className="grid grid-cols-3 p-3">
+                          <div className="font-mono text-sm">tracks</div>
+                          <div className="font-mono text-sm">Track[]</div>
+                          <div>Array of track objects to display in the playlist.</div>
+                        </div>
+                        <div className="grid grid-cols-3 p-3">
+                          <div className="font-mono text-sm">selectedTrackId</div>
+                          <div className="font-mono text-sm">number?</div>
+                          <div>ID of the currently selected/playing track.</div>
+                        </div>
+                        <div className="grid grid-cols-3 p-3">
+                          <div className="font-mono text-sm">onSelect</div>
+                          <div className="font-mono text-sm">(track: Track) =&gt; void</div>
+                          <div>Callback when a track is selected.</div>
+                        </div>
+                        <div className="grid grid-cols-3 p-3">
+                          <div className="font-mono text-sm">onShuffle</div>
+                          <div className="font-mono text-sm">() =&gt; void</div>
+                          <div>Callback when the shuffle button is clicked.</div>
+                        </div>
+                        <div className="grid grid-cols-3 p-3">
+                          <div className="font-mono text-sm">onRepeat</div>
+                          <div className="font-mono text-sm">() =&gt; void</div>
+                          <div>Callback when the repeat button is clicked.</div>
+                        </div>
+                        <div className="grid grid-cols-3 p-3">
+                          <div className="font-mono text-sm">onAddTrack</div>
+                          <div className="font-mono text-sm">() =&gt; void</div>
+                          <div>Callback when the add track button is clicked.</div>
+                        </div>
+                        <div className="grid grid-cols-3 p-3">
+                          <div className="font-mono text-sm">onDownload</div>
+                          <div className="font-mono text-sm">() =&gt; void</div>
+                          <div>Callback when the download button is clicked.</div>
+                        </div>
+                        <div className="grid grid-cols-3 p-3">
+                          <div className="font-mono text-sm">className</div>
+                          <div className="font-mono text-sm">string?</div>
+                          <div>Additional CSS classes to apply to the component.</div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h3 className="text-lg font-medium mb-2">Track Object Structure</h3>
+                      <div className="border rounded-md p-4 bg-muted font-mono text-sm whitespace-pre overflow-auto">
+{`interface Track {
+  id: number;
+  title: string;
+  artist: string;
+  duration: number; // in seconds
+  albumArt?: string;
+  audioSrc?: string;
+  waveformData?: string;
+}`}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h3 className="text-lg font-medium mb-2">Usage Guidelines</h3>
+                      <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
+                        <li>Use the Playlist component when you need to display multiple tracks that can be selected for playback.</li>
+                        <li>The component works best when paired with an AudioPlayer component that can play the selected track.</li>
+                        <li>Set the selectedTrackId prop to highlight the currently playing track.</li>
+                        <li>Implement the onSelect callback to handle track selection and playback.</li>
+                        <li>The component supports keyboard navigation for accessibility.</li>
+                      </ul>
                     </div>
                   </CardContent>
                 </Card>
               </TabsContent>
               
-              <TabsContent value="examples" className="space-y-4 mt-6">
+              <TabsContent value="code" className="mt-6">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Basic Example</CardTitle>
-                    <CardDescription>A simple playlist with track selection.</CardDescription>
+                    <CardTitle>Implementation</CardTitle>
+                    <CardDescription>
+                      Code example of how to use the Playlist component.
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <Playlist 
-                      tracks={tracks}
-                      selectedTrackId={selectedTrackId}
-                      onSelect={(track) => setSelectedTrackId(track.id)}
-                    />
+                    <div className="border rounded-md p-4 bg-muted font-mono text-sm whitespace-pre overflow-auto">
+{`import { useState } from 'react';
+import { Playlist } from '@musicui/react';
+import type { Track } from '@musicui/react';
+
+export default function PlaylistExample() {
+  const [selectedTrack, setSelectedTrack] = useState<Track | null>(null);
+  
+  const tracks: Track[] = [
+    {
+      id: 1,
+      title: "Starlight Melody",
+      artist: "Cosmic Dreams",
+      duration: 237,
+      albumArt: "/album-art-1.jpg"
+    },
+    {
+      id: 2,
+      title: "Ocean Waves",
+      artist: "Ambient Shores",
+      duration: 184,
+      albumArt: "/album-art-2.jpg"
+    },
+    // More tracks...
+  ];
+  
+  return (
+    <Playlist
+      tracks={tracks}
+      selectedTrackId={selectedTrack?.id}
+      onSelect={(track) => setSelectedTrack(track)}
+      onShuffle={() => {
+        // Implement shuffle logic
+      }}
+      onRepeat={() => {
+        // Implement repeat logic
+      }}
+    />
+  );
+}`}
+                    </div>
                   </CardContent>
                 </Card>
-                
-                <div className="text-center mt-8">
-                  <Link href="/components/showcase">
-                    <Button>View All Components in Showcase</Button>
-                  </Link>
-                </div>
               </TabsContent>
             </Tabs>
           </main>
