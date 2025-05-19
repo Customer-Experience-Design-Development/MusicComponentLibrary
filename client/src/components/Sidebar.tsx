@@ -1,6 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { NavCategory } from "@/types/music";
 import { navigate } from "wouter/use-browser-location";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface SidebarProps {
   activePath: string;
@@ -10,6 +11,7 @@ interface SidebarProps {
 
 export function Sidebar({ activePath, className = '', onLinkClick }: SidebarProps) {
   const [location] = useLocation();
+  const isMobile = useIsMobile();
 
   const handleLinkClick = (path: string) => {
     if (onLinkClick) {
@@ -17,6 +19,10 @@ export function Sidebar({ activePath, className = '', onLinkClick }: SidebarProp
     }
     navigate(path);
   };
+
+  if (isMobile) {
+    return null;
+  }
 
   const categories = [
     {
