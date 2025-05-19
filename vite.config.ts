@@ -32,6 +32,8 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
-    allowedHosts: ["localhost", "127.0.0.1", "*.replit.dev", "*.*.replit.dev", "67d346d6-bb1f-48f6-9eda-91ea977aedf7-00-3qlyrcldilmj3.spock.replit.dev"]
+    host: true,
+    port: 5000,
+    allowedHosts: true,
   },
 });
