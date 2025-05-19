@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -32,6 +32,6 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
-    allowedHosts: ['localhost', '127.0.0.1', '*.replit.dev'],
+    allowedHosts: ["localhost", "127.0.0.1", "*.replit.dev", "*.*.replit.dev", "67d346d6-bb1f-48f6-9eda-91ea977aedf7-00-3qlyrcldilmj3.spock.replit.dev"]
   },
 });
