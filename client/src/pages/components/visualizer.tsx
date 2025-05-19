@@ -1,18 +1,20 @@
-import { useState, useRef, useEffect } from 'react';
 import { AppHeader } from '@/components/AppHeader';
 import { Sidebar } from '@/components/Sidebar';
 import { PageHeader } from '@/components/PageHeader';
 import { Footer } from '@/components/Footer';
 import { NavCategory } from '@/types/music';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { Visualizer } from '@/components/music-ui';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Link } from 'wouter';
+import { Visualizer } from '@/components/music-ui/Visualizer';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function VisualizerPage() {
-  // Sample data for the sidebar
+  // Sample audio data for demo
+  const audioData = {
+    frequencyData: new Float32Array(128).map((_, i) => Math.sin(i * 0.1) * 0.5 + 0.5),
+    timeData: new Float32Array(128).map((_, i) => Math.cos(i * 0.1) * 0.5 + 0.5),
+  };
+
+  // Sidebar categories
   const sidebarCategories: NavCategory[] = [
     {
       title: "Getting Started",
@@ -26,6 +28,7 @@ export default function VisualizerPage() {
     {
       title: "Components",
       links: [
+        { title: "Overview", path: "/components" },
         { title: "Component Showcase", path: "/components/showcase" },
         { title: "Audio Player", path: "/components/audio-player" },
         { title: "Playlist", path: "/components/playlist" },
@@ -83,222 +86,215 @@ export default function VisualizerPage() {
     { icon: "ri-discord-fill", href: "https://discord.gg/musicui" }
   ];
 
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [visualizerType, setVisualizerType] = useState<'bars' | 'circle' | 'wave'>('bars');
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const audioSrc = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
-
-  const handlePlayPause = () => {
-    if (!audioRef.current) return;
-    
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play();
-    }
-    
-    setIsPlaying(!isPlaying);
-  };
-
   return (
     <div className="min-h-screen">
       <AppHeader />
-      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-12 gap-6 mt-4">
-          <Sidebar categories={sidebarCategories} />
+      <div className="grid grid-cols-12 gap-6 mt-4">
+        <Sidebar activePath="/components/visualizer" />
+        <main className="col-span-12 lg:col-span-9">
+          <PageHeader 
+            title="Visualizer Component" 
+            description="Real-time audio visualization with customizable styles and effects."
+          />
           
-          <main className="col-span-12 lg:col-span-9">
-            <PageHeader 
-              title="Visualizer Component" 
-              description="Real-time audio visualization for music applications."
-            />
+          <Tabs defaultValue="preview" className="mt-6">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="preview">Preview</TabsTrigger>
+              <TabsTrigger value="documentation">Documentation</TabsTrigger>
+              <TabsTrigger value="code">Code</TabsTrigger>
+            </TabsList>
             
-            <Tabs defaultValue="overview" className="mt-6">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="api">API</TabsTrigger>
-                <TabsTrigger value="examples">Examples</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="overview" className="space-y-4 mt-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Visualizer</CardTitle>
-                    <CardDescription>
-                      A component for creating real-time visual representations of audio frequencies.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="md:flex md:justify-between md:space-x-4">
-                      <div className="md:flex-1">
-                        <h3 className="text-lg font-medium mb-2">Features</h3>
-                        <ul className="list-disc pl-5 space-y-1">
-                          <li>Multiple visualization styles (bars, wave, circle)</li>
-                          <li>Real-time frequency analysis</li>
-                          <li>Customizable colors and appearance</li>
-                          <li>Responsive design that adapts to container size</li>
-                          <li>Performant with canvas-based rendering</li>
-                          <li>Animation smoothing for visual appeal</li>
-                        </ul>
+            <TabsContent value="preview" className="p-0 mt-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Visualizer Demo</CardTitle>
+                  <CardDescription>
+                    Interactive demo of the Visualizer component with different visualization styles.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-6">
+                  <div className="max-w-2xl mx-auto">
+                    <Visualizer 
+                      audioData={audioData}
+                      type="bars"
+                      color="#4F46E5"
+                      height={200}
+                      width={600}
+                      barWidth={4}
+                      barGap={2}
+                      smoothing={0.8}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="documentation" className="mt-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Documentation</CardTitle>
+                  <CardDescription>
+                    Learn how to use the Visualizer component in your applications.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-6 space-y-6">
+                  <div>
+                    <h3 className="text-lg font-medium mb-2">Overview</h3>
+                    <p className="text-muted-foreground">
+                      The Visualizer component provides real-time audio visualization with support for various
+                      visualization styles, including bars, waves, and circles. It's perfect for creating
+                      engaging audio experiences in your applications.
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h3 className="text-lg font-medium mb-2">Props</h3>
+                    <div className="border rounded-md divide-y">
+                      <div className="grid grid-cols-3 p-3">
+                        <div className="font-medium">Name</div>
+                        <div className="font-medium">Type</div>
+                        <div className="font-medium">Description</div>
                       </div>
-                      <div className="md:flex-1 mt-4 md:mt-0">
-                        <h3 className="text-lg font-medium mb-2">Use Cases</h3>
-                        <ul className="list-disc pl-5 space-y-1">
-                          <li>Music playback interfaces with visual feedback</li>
-                          <li>DJ and music creation applications</li>
-                          <li>Audio recording and editing tools</li>
-                          <li>Live music performances</li>
-                          <li>Music education and theory applications</li>
-                          <li>Background visuals for music-focused websites</li>
-                        </ul>
+                      <div className="grid grid-cols-3 p-3">
+                        <div className="font-mono text-sm">audioData</div>
+                        <div className="font-mono text-sm">AudioData</div>
+                        <div>Audio data containing frequency and time domain data.</div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Installation</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="bg-neutral-100 dark:bg-neutral-800 rounded-md p-4">
-                      <code className="text-sm">npm install music-ui</code>
-                    </div>
-                    <div className="mt-4 bg-neutral-100 dark:bg-neutral-800 rounded-md p-4">
-                      <code className="text-sm">
-                        import {"{"} Visualizer {"}"} from 'music-ui';
-                      </code>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-              
-              <TabsContent value="api" className="space-y-4 mt-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Properties</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="overflow-x-auto">
-                      <table className="w-full border-collapse">
-                        <thead>
-                          <tr className="border-b">
-                            <th className="text-left py-2 font-medium">Property</th>
-                            <th className="text-left py-2 font-medium">Type</th>
-                            <th className="text-left py-2 font-medium">Default</th>
-                            <th className="text-left py-2 font-medium">Description</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr className="border-b">
-                            <td className="py-2 font-mono text-sm">type</td>
-                            <td className="py-2 font-mono text-sm">'bars' | 'circle' | 'wave'</td>
-                            <td className="py-2 font-mono text-sm">'bars'</td>
-                            <td className="py-2">The visualization style to display</td>
-                          </tr>
-                          <tr className="border-b">
-                            <td className="py-2 font-mono text-sm">colorPalette</td>
-                            <td className="py-2 font-mono text-sm">string[]</td>
-                            <td className="py-2 font-mono text-sm">['#6200EA', ...]</td>
-                            <td className="py-2">Array of colors to use in the visualization</td>
-                          </tr>
-                          <tr className="border-b">
-                            <td className="py-2 font-mono text-sm">height</td>
-                            <td className="py-2 font-mono text-sm">number</td>
-                            <td className="py-2 font-mono text-sm">undefined</td>
-                            <td className="py-2">Height of the visualization in pixels</td>
-                          </tr>
-                          <tr className="border-b">
-                            <td className="py-2 font-mono text-sm">isActive</td>
-                            <td className="py-2 font-mono text-sm">boolean</td>
-                            <td className="py-2 font-mono text-sm">false</td>
-                            <td className="py-2">Whether the visualization is active</td>
-                          </tr>
-                          <tr className="border-b">
-                            <td className="py-2 font-mono text-sm">audioElement</td>
-                            <td className="py-2 font-mono text-sm">HTMLAudioElement | null</td>
-                            <td className="py-2 font-mono text-sm">undefined</td>
-                            <td className="py-2">Audio element to analyze</td>
-                          </tr>
-                          <tr className="border-b">
-                            <td className="py-2 font-mono text-sm">onTypeChange</td>
-                            <td className="py-2 font-mono text-sm">(type: 'bars' | 'circle' | 'wave') => void</td>
-                            <td className="py-2 font-mono text-sm">undefined</td>
-                            <td className="py-2">Callback when visualization type changes</td>
-                          </tr>
-                          <tr>
-                            <td className="py-2 font-mono text-sm">className</td>
-                            <td className="py-2 font-mono text-sm">string</td>
-                            <td className="py-2 font-mono text-sm">''</td>
-                            <td className="py-2">Additional CSS class names</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-              
-              <TabsContent value="examples" className="space-y-4 mt-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Interactive Example</CardTitle>
-                    <CardDescription>An interactive visualizer with different visualization types.</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="flex justify-between items-center">
-                        <Button onClick={handlePlayPause}>
-                          {isPlaying ? 'Pause' : 'Play'}
-                        </Button>
-                        
-                        <Select value={visualizerType} onValueChange={(value) => setVisualizerType(value as any)}>
-                          <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Visualization Type" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="bars">Bars</SelectItem>
-                            <SelectItem value="circle">Circle</SelectItem>
-                            <SelectItem value="wave">Wave</SelectItem>
-                          </SelectContent>
-                        </Select>
+                      <div className="grid grid-cols-3 p-3">
+                        <div className="font-mono text-sm">type</div>
+                        <div className="font-mono text-sm">'bars' | 'waves' | 'circles'</div>
+                        <div>Type of visualization to display.</div>
                       </div>
-                      
-                      <div className="aspect-video bg-black rounded-md overflow-hidden">
-                        <Visualizer 
-                          type={visualizerType}
-                          audioElement={audioRef.current}
-                          isActive={isPlaying}
-                          colorPalette={['#6200EA', '#9D46FF', '#D0BCFF']}
-                          onTypeChange={setVisualizerType}
-                        />
+                      <div className="grid grid-cols-3 p-3">
+                        <div className="font-mono text-sm">color</div>
+                        <div className="font-mono text-sm">string</div>
+                        <div>Color of the visualization.</div>
+                      </div>
+                      <div className="grid grid-cols-3 p-3">
+                        <div className="font-mono text-sm">height</div>
+                        <div className="font-mono text-sm">number</div>
+                        <div>Height of the visualization in pixels.</div>
+                      </div>
+                      <div className="grid grid-cols-3 p-3">
+                        <div className="font-mono text-sm">width</div>
+                        <div className="font-mono text-sm">number</div>
+                        <div>Width of the visualization in pixels.</div>
+                      </div>
+                      <div className="grid grid-cols-3 p-3">
+                        <div className="font-mono text-sm">barWidth</div>
+                        <div className="font-mono text-sm">number</div>
+                        <div>Width of each bar in pixels (for bar visualization).</div>
+                      </div>
+                      <div className="grid grid-cols-3 p-3">
+                        <div className="font-mono text-sm">barGap</div>
+                        <div className="font-mono text-sm">number</div>
+                        <div>Gap between bars in pixels (for bar visualization).</div>
+                      </div>
+                      <div className="grid grid-cols-3 p-3">
+                        <div className="font-mono text-sm">smoothing</div>
+                        <div className="font-mono text-sm">number</div>
+                        <div>Smoothing factor for animations (0-1).</div>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-                
-                <div className="text-center mt-8">
-                  <Link href="/components/showcase">
-                    <Button>View All Components in Showcase</Button>
-                  </Link>
-                </div>
-              </TabsContent>
-            </Tabs>
-          </main>
-        </div>
+                  </div>
+                  
+                  <div>
+                    <h3 className="text-lg font-medium mb-2">AudioData Structure</h3>
+                    <div className="border rounded-md p-4 bg-muted font-mono text-sm whitespace-pre overflow-auto">
+{`interface AudioData {
+  frequencyData: Float32Array;
+  timeData: Float32Array;
+}`}
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h3 className="text-lg font-medium mb-2">Usage Guidelines</h3>
+                    <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
+                      <li>Use the Visualizer component to create engaging audio visualizations in your applications.</li>
+                      <li>Choose the appropriate visualization type based on your needs (bars, waves, or circles).</li>
+                      <li>Adjust the color, size, and smoothing parameters to match your design.</li>
+                      <li>The component automatically handles animation and updates based on the provided audio data.</li>
+                      <li>For best performance, ensure the audio data arrays are properly sized and updated regularly.</li>
+                    </ul>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="code" className="mt-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Implementation</CardTitle>
+                  <CardDescription>
+                    Code example of how to use the Visualizer component.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="border rounded-md p-4 bg-muted font-mono text-sm whitespace-pre overflow-auto">
+{`import { useEffect, useRef } from 'react';
+import { Visualizer } from '@musicui/react';
+
+export default function VisualizerExample() {
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const [audioData, setAudioData] = useState<AudioData>({
+    frequencyData: new Float32Array(128),
+    timeData: new Float32Array(128)
+  });
+
+  useEffect(() => {
+    // Initialize audio context and analyser
+    audioContextRef.current = new AudioContext();
+    analyserRef.current = audioContextRef.current.createAnalyser();
+    analyserRef.current.fftSize = 256;
+
+    // Start animation loop
+    const animate = () => {
+      if (analyserRef.current) {
+        const frequencyData = new Float32Array(analyserRef.current.frequencyBinCount);
+        const timeData = new Float32Array(analyserRef.current.frequencyBinCount);
+        
+        analyserRef.current.getFloatFrequencyData(frequencyData);
+        analyserRef.current.getFloatTimeDomainData(timeData);
+        
+        setAudioData({ frequencyData, timeData });
+      }
+      requestAnimationFrame(animate);
+    };
+    
+    animate();
+    
+    return () => {
+      audioContextRef.current?.close();
+    };
+  }, []);
+
+  return (
+    <Visualizer
+      audioData={audioData}
+      type="bars"
+      color="#4F46E5"
+      height={200}
+      width={600}
+      barWidth={4}
+      barGap={2}
+      smoothing={0.8}
+    />
+  );
+}`}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </main>
       </div>
-      
+      </div>
       <Footer 
         categories={footerCategories} 
         socialLinks={socialLinks} 
-      />
-      
-      <audio 
-        ref={audioRef}
-        src={audioSrc}
-        className="hidden"
-        loop
       />
     </div>
   );

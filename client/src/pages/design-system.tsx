@@ -101,7 +101,7 @@ export default function DesignSystem() {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-12 gap-6 mt-4">
-          <Sidebar categories={sidebarCategories} />
+          <Sidebar activePath="/design-system" />
           
           <main className="col-span-12 lg:col-span-9">
             <PageHeader 

@@ -22,40 +22,7 @@ import {
 
 export default function ComponentsIndex() {
   // Sidebar categories
-  const sidebarCategories: NavCategory[] = [
-    {
-      title: "Getting Started",
-      links: [
-        { title: "Introduction", path: "/" },
-        { title: "Installation", path: "/installation" },
-        { title: "Usage", path: "/usage" },
-        { title: "Theming", path: "/theming" },
-      ]
-    },
-    {
-      title: "Components",
-      links: [
-        { title: "Overview", path: "/components", active: true },
-        { title: "Component Showcase", path: "/components/showcase" },
-        { title: "Audio Player", path: "/components/audio-player" },
-        { title: "Playlist", path: "/components/playlist" },
-        { title: "Visualizer", path: "/components/visualizer" },
-        { title: "Waveform", path: "/components/waveform" },
-        { title: "Volume Control", path: "/components/volume-control" },
-        { title: "Media Card", path: "/components/media-card" },
-        { title: "Equalizer", path: "/components/equalizer" },
-      ]
-    },
-    {
-      title: "Resources",
-      links: [
-        { title: "Figma Integration", path: "/resources/figma" },
-        { title: "Platform Support", path: "/resources/platforms" },
-        { title: "Accessibility", path: "/resources/accessibility" },
-        { title: "Changelog", path: "/resources/changelog" },
-      ]
-    }
-  ];
+  
 
   // Footer categories
   const footerCategories = [
@@ -163,7 +130,7 @@ export default function ComponentsIndex() {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-12 gap-6 mt-4">
-          <Sidebar categories={sidebarCategories} />
+          <Sidebar activePath="/components" />
           
           <main className="col-span-12 lg:col-span-9">
             <PageHeader 

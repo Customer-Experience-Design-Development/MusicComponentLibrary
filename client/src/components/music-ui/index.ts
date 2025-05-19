@@ -19,4 +19,4 @@ export { TheoryVisualizer } from './education/TheoryVisualizer';
 export { RightsManager } from './industry/RightsManager';
 
 // Type Re-exports
-export type { Track, Playlist as PlaylistType } from '@/types/music';
+export type { Track, Playlist as PlaylistType, Album } from '@/types/music';

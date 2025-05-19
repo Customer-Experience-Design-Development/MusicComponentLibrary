@@ -1,0 +1,512 @@
+import { useState } from 'react';
+import { AppHeader } from '@/components/AppHeader';
+import { Sidebar } from '@/components/Sidebar';
+import { PageHeader } from '@/components/PageHeader';
+import { PlatformCompatibility } from '@/components/PlatformCompatibility';
+import { AudioPlayer } from '@/components/music-ui/AudioPlayer';
+import { Visualizer } from '@/components/music-ui/Visualizer';
+import { Playlist } from '@/components/music-ui/Playlist';
+import { ApiExampleSection } from '@/components/ApiExampleSection';
+import { FeaturesSection } from '@/components/FeaturesSection';
+import { GetStartedCTA } from '@/components/GetStartedCTA';
+import { Footer } from '@/components/Footer';
+import { NavCategory, Platform, Track, Feature, CodeExample } from '@/types/music';
+
+export default function Home() {
+  const [currentTrack, setCurrentTrack] = useState<Track>({
+    id: 1,
+    title: "Cosmic Harmony",
+    artist: "Astral Projections",
+    duration: 331, // 5:31
+    albumArt: "https://images.unsplash.com/photo-1462965326201-d02e4f455804?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100"
+  });
+
+  // Sample data for the sidebar
+  const sidebarCategories: NavCategory[] = [
+    {
+      title: "Getting Started",
+      links: [
+        { title: "Introduction", path: "/", active: true },
+        { title: "Installation", path: "/installation" },
+        { title: "Usage", path: "/usage" },
+        { title: "Theming", path: "/theming" },
+      ]
+    },
+    {
+      title: "Components",
+      links: [
+        { title: "Overview", path: "/components" },
+        { title: "Component Showcase", path: "/components/showcase" },
+        { title: "Audio Player", path: "/components/audio-player" },
+        { title: "Playlist", path: "/components/playlist" },
+        { title: "Visualizer", path: "/components/visualizer" },
+        { title: "Waveform", path: "/components/waveform" },
+        { title: "Volume Control", path: "/components/volume-control" },
+        { title: "Media Card", path: "/components/media-card" },
+        { title: "Equalizer", path: "/components/equalizer", active: true },
+      ]
+    },
+    {
+      title: "Resources",
+      links: [
+        { title: "Figma Integration", path: "/resources/figma" },
+        { title: "Platform Support", path: "/resources/platforms" },
+        { title: "Accessibility", path: "/resources/accessibility" },
+        { title: "Changelog", path: "/resources/changelog" },
+      ]
+    }
+  ];
+
+  // Platform data
+  const platforms: Platform[] = [
+    { name: "Web", icon: "ri-computer-line", supportLevel: 100 },
+    { name: "React", icon: "ri-reactjs-line", supportLevel: 100 },
+    { name: "iOS", icon: "ri-apple-fill", supportLevel: 90 },
+    { name: "Android", icon: "ri-android-fill", supportLevel: 85 },
+  ];
+
+  // Sample tracks for playlist
+  const tracks: Track[] = [
+    {
+      id: 1,
+      title: "Cosmic Harmony",
+      artist: "Astral Projections",
+      duration: 331, // 5:31
+      albumArt: "https://images.unsplash.com/photo-1462965326201-d02e4f455804?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100"
+    },
+    {
+      id: 2,
+      title: "Midnight Dreams",
+      artist: "Luna Waves",
+      duration: 255, // 4:15
+      albumArt: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100"
+    },
+    {
+      id: 3,
+      title: "Electric Soul",
+      artist: "Neon Vibes",
+      duration: 222, // 3:42
+      albumArt: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100"
+    },
+    {
+      id: 4,
+      title: "Urban Echoes",
+      artist: "City Soundscapes",
+      duration: 378, // 6:18
+      albumArt: "https://images.unsplash.com/photo-1501612780327-45045538702b?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100"
+    }
+  ];
+
+  // Code examples
+  const codeExamples: CodeExample[] = [
+    {
+      language: "typescript",
+      title: "React",
+      code: `// Import the MusicUI components
+import { AudioPlayer, Visualizer, Playlist } from 'music-ui';
+
+// Define your component
+function MusicApp() {
+  // Example state hooks
+  const [currentTrack, setCurrentTrack] = useState(sampleTracks[0]);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [visualizerType, setVisualizerType] = useState('bars');
+
+  // Handle track selection
+  const handleTrackSelect = (track) => {
+    setCurrentTrack(track);
+    setIsPlaying(true);
+  };
+
+  return (
+    <div className="music-app-container">
+      <AudioPlayer
+        track={currentTrack}
+        isPlaying={isPlaying}
+        onPlayPause={() => setIsPlaying(!isPlaying)}
+        theme="default"
+      />
+      
+      <div className="player-extras">
+        <Visualizer
+          type={visualizerType}
+          audioSource={"#audio-element"}
+          isActive={isPlaying}
+          height={200}
+          colorPalette={["#6200EA", "#00C853", "#FF3D00"]}
+        />
+        
+        <Playlist
+          tracks={sampleTracks}
+          selectedTrack={currentTrack.id}
+          onSelect={handleTrackSelect}
+          onShuffle={handleShuffle}
+        />
+      </div>
+    </div>
+  );
+}
+
+export default MusicApp;`,
+      active: true
+    },
+    {
+      language: "swift",
+      title: "iOS (Swift)",
+      code: `import MusicUI
+
+class MusicPlayerViewController: UIViewController {
+    
+    private var currentTrack: Track?
+    private var isPlaying = false
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupPlayer()
+    }
+    
+    private func setupPlayer() {
+        // Initialize audio player with configuration
+        let playerConfig = MUAudioPlayerConfig(
+            showWaveform: true,
+            theme: .default,
+            controlsPosition: .bottom
+        )
+        
+        let audioPlayer = MUAudioPlayer(config: playerConfig)
+        audioPlayer.delegate = self
+        
+        // Add to view hierarchy
+        view.addSubview(audioPlayer)
+        
+        // Setup constraints
+        audioPlayer.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            audioPlayer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            audioPlayer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            audioPlayer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            audioPlayer.heightAnchor.constraint(equalToConstant: 240)
+        ])
+        
+        // Setup visualizer
+        let visualizer = MUVisualizer(type: .bars, colorPalette: [UIColor(hex: "6200EA"), UIColor(hex: "00C853")])
+        view.addSubview(visualizer)
+        
+        // Setup constraints for visualizer
+        visualizer.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            visualizer.topAnchor.constraint(equalTo: audioPlayer.bottomAnchor, constant: 20),
+            visualizer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            visualizer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            visualizer.heightAnchor.constraint(equalToConstant: 160)
+        ])
+    }
+}
+
+extension MusicPlayerViewController: MUAudioPlayerDelegate {
+    func audioPlayer(_ player: MUAudioPlayer, didChangePlaybackStatus isPlaying: Bool) {
+        self.isPlaying = isPlaying
+    }
+    
+    func audioPlayer(_ player: MUAudioPlayer, didSelectTrack track: Track) {
+        currentTrack = track
+    }
+}`
+    },
+    {
+      language: "kotlin",
+      title: "Android (Kotlin)",
+      code: `import com.musicui.components.*
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var audioPlayer: MUAudioPlayer
+    private lateinit var visualizer: MUVisualizer
+    private lateinit var playlist: MUPlaylist
+    
+    private var currentTrack: Track? = null
+    private var isPlaying = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        
+        // Initialize audio player
+        audioPlayer = findViewById(R.id.audio_player)
+        audioPlayer.setCallback(object : MUAudioPlayerCallback {
+            override fun onPlaybackStateChanged(playing: Boolean) {
+                isPlaying = playing
+                visualizer.setActive(playing)
+            }
+            
+            override fun onTrackChanged(track: Track) {
+                currentTrack = track
+                visualizer.setAudioSessionId(audioPlayer.audioSessionId)
+            }
+        })
+        
+        // Initialize visualizer
+        visualizer = findViewById(R.id.visualizer)
+        visualizer.setType(MUVisualizerType.BARS)
+        visualizer.setColorPalette(
+            arrayOf(
+                Color.parseColor("#6200EA"),
+                Color.parseColor("#00C853"),
+                Color.parseColor("#FF3D00")
+            )
+        )
+        
+        // Initialize playlist
+        playlist = findViewById(R.id.playlist)
+        playlist.setTracks(getSampleTracks())
+        playlist.setOnTrackSelectedListener { track ->
+            audioPlayer.playTrack(track)
+        }
+        
+        // Load initial track
+        if (getSampleTracks().isNotEmpty()) {
+            audioPlayer.playTrack(getSampleTracks()[0])
+        }
+    }
+    
+    private fun getSampleTracks(): List<Track> {
+        // Return sample tracks
+        return listOf(
+            Track(1, "Cosmic Harmony", "Astral Projections", 331),
+            Track(2, "Midnight Dreams", "Luna Waves", 255),
+            Track(3, "Electric Soul", "Neon Vibes", 222)
+        )
+    }
+}`
+    },
+    {
+      language: "javascript",
+      title: "Web (JavaScript)",
+      code: `// Import the MusicUI library
+import { MusicUI } from 'music-ui';
+
+// Initialize on DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+  // Create an instance of the MusicUI library
+  const musicUI = new MusicUI();
+  
+  // Get DOM containers
+  const playerContainer = document.querySelector('#player-container');
+  const visualizerContainer = document.querySelector('#visualizer-container');
+  const playlistContainer = document.querySelector('#playlist-container');
+  
+  // Initialize player
+  const player = musicUI.createAudioPlayer({
+    container: playerContainer,
+    theme: 'default',
+    showWaveform: true,
+    autoPlay: false
+  });
+  
+  // Initialize visualizer
+  const visualizer = musicUI.createVisualizer({
+    container: visualizerContainer,
+    type: 'bars',
+    colorPalette: ['#6200EA', '#00C853', '#FF3D00'],
+    height: 200
+  });
+  
+  // Connect player audio to visualizer
+  visualizer.connectTo(player.getAudioElement());
+  
+  // Initialize playlist
+  const playlist = musicUI.createPlaylist({
+    container: playlistContainer,
+    tracks: getSampleTracks()
+  });
+  
+  // Handle track selection
+  playlist.onTrackSelect((track) => {
+    player.loadTrack(track);
+    player.play();
+  });
+  
+  // Handle playback state changes
+  player.onPlaybackChange((isPlaying) => {
+    visualizer.setActive(isPlaying);
+    
+    // Update UI elements
+    const playButton = document.querySelector('#play-button');
+    playButton.textContent = isPlaying ? 'Pause' : 'Play';
+  });
+  
+  // Load initial track
+  if (getSampleTracks().length > 0) {
+    player.loadTrack(getSampleTracks()[0]);
+  }
+});
+
+function getSampleTracks() {
+  return [
+    {
+      id: 1,
+      title: "Cosmic Harmony",
+      artist: "Astral Projections",
+      duration: 331,
+      audioSrc: "audio/cosmic-harmony.mp3",
+      albumArt: "images/cosmic-harmony.jpg"
+    },
+    {
+      id: 2,
+      title: "Midnight Dreams",
+      artist: "Luna Waves",
+      duration: 255,
+      audioSrc: "audio/midnight-dreams.mp3",
+      albumArt: "images/midnight-dreams.jpg"
+    },
+    {
+      id: 3,
+      title: "Electric Soul",
+      artist: "Neon Vibes",
+      duration: 222,
+      audioSrc: "audio/electric-soul.mp3",
+      albumArt: "images/electric-soul.jpg"
+    }
+  ];
+}`
+    }
+  ];
+
+  // Features
+  const features: Feature[] = [
+    {
+      title: "Customizable Themes",
+      description: "Apply your brand colors and styling to all components with our powerful theming system.",
+      icon: "ri-palette-line"
+    },
+    {
+      title: "Cross-Platform",
+      description: "Components that work seamlessly across web, React, iOS, and Android applications.",
+      icon: "ri-device-line"
+    },
+    {
+      title: "Comprehensive Docs",
+      description: "Detailed documentation with examples, API references, and implementation guides.",
+      icon: "ri-file-list-line"
+    },
+    {
+      title: "Figma Integration",
+      description: "Import and export designs between Figma and your codebase with our integration tools.",
+      icon: "ri-layout-grid-line"
+    },
+    {
+      title: "Accessibility First",
+      description: "WCAG compliant components that ensure your music apps are accessible to everyone.",
+      icon: "ri-accessible-line"
+    },
+    {
+      title: "Extensible API",
+      description: "Flexible component API that allows for advanced customization and extension.",
+      icon: "ri-code-box-line"
+    }
+  ];
+
+  // Footer categories
+  const footerCategories = [
+    {
+      title: "Resources",
+      links: [
+        { label: "Documentation", href: "/documentation" },
+        { label: "API Reference", href: "/api" },
+        { label: "Tutorials", href: "/tutorials" },
+        { label: "Examples", href: "/examples" }
+      ]
+    },
+    {
+      title: "Community",
+      links: [
+        { label: "GitHub", href: "https://github.com/musicui" },
+        { label: "Discord", href: "https://discord.gg/musicui" },
+        { label: "Twitter", href: "https://twitter.com/musicui" },
+        { label: "Stack Overflow", href: "https://stackoverflow.com/questions/tagged/musicui" }
+      ]
+    },
+    {
+      title: "Legal",
+      links: [
+        { label: "Privacy Policy", href: "/privacy" },
+        { label: "Terms of Service", href: "/terms" },
+        { label: "License", href: "/license" }
+      ]
+    }
+  ];
+
+  // Social links
+  const socialLinks = [
+    { icon: "ri-twitter-fill", href: "https://twitter.com/musicui" },
+    { icon: "ri-github-fill", href: "https://github.com/musicui" },
+    { icon: "ri-discord-fill", href: "https://discord.gg/musicui" }
+  ];
+
+  const handleTrackSelect = (track: Track) => {
+    setCurrentTrack(track);
+  };
+
+  return (
+    <div className="min-h-screen">
+      <AppHeader user={{ name: "John Doe", initials: "JD" }} />
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-12 gap-6 mt-4">
+          <Sidebar categories={sidebarCategories} />
+          
+          <main className="col-span-12 lg:col-span-9">
+            <PageHeader 
+              title="MusicUI Component Library" 
+              description="A comprehensive UI component library designed specifically for building music applications across Web, iOS, Android, and React platforms."
+            />
+            
+            <PlatformCompatibility platforms={platforms} />
+            
+            <section className="mb-12">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-bold">Featured Components</h2>
+                <a href="/components" className="text-sm text-primary hover:underline flex items-center">
+                  View all components
+                  <i className="ri-arrow-right-line ml-1"></i>
+                </a>
+              </div>
+
+              <div className="bg-card rounded-xl shadow-sm border p-5 mb-8">
+                <h3 className="font-bold text-lg mb-5">Audio Player</h3>
+                <AudioPlayer track={currentTrack} />
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-card rounded-xl shadow-sm border p-5">
+                  <h3 className="font-bold text-lg mb-4">Visualizer</h3>
+                  <Visualizer height={200} />
+                </div>
+                
+                <div className="bg-card rounded-xl shadow-sm border p-5">
+                  <h3 className="font-bold text-lg mb-4">Playlist</h3>
+                  <Playlist 
+                    tracks={tracks} 
+                    selectedTrackId={currentTrack.id}
+                    onSelect={handleTrackSelect}
+                  />
+                </div>
+              </div>
+            </section>
+            
+            <ApiExampleSection examples={codeExamples} />
+            
+            <FeaturesSection features={features} />
+            
+            <GetStartedCTA />
+          </main>
+        </div>
+      </div>
+      
+      <Footer 
+        categories={footerCategories} 
+        socialLinks={socialLinks} 
+      />
+    </div>
+  );
+}

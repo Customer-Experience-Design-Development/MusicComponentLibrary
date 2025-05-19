@@ -35,13 +35,15 @@ export default function Home() {
     {
       title: "Components",
       links: [
+        { title: "Overview", path: "/components" },
+        { title: "Component Showcase", path: "/components/showcase" },
         { title: "Audio Player", path: "/components/audio-player" },
         { title: "Playlist", path: "/components/playlist" },
         { title: "Visualizer", path: "/components/visualizer" },
         { title: "Waveform", path: "/components/waveform" },
         { title: "Volume Control", path: "/components/volume-control" },
         { title: "Media Card", path: "/components/media-card" },
-        { title: "Equalizer", path: "/components/equalizer" },
+        { title: "Equalizer", path: "/components/equalizer", active: true },
       ]
     },
     {
@@ -451,7 +453,7 @@ function getSampleTracks() {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-12 gap-6 mt-4">
-          <Sidebar categories={sidebarCategories} />
+          <Sidebar activePath="/home" />
           
           <main className="col-span-12 lg:col-span-9">
             <PageHeader 

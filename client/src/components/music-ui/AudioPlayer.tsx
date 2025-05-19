@@ -1,11 +1,17 @@
 import { useState, useRef, useEffect } from 'react';
-import { Track } from '@/types/music';
+import { Track, AudioSource } from '@/types/music';
 import { formatTime } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { VolumeControl } from './VolumeControl';
 import { Waveform } from './Waveform';
 import { Equalizer } from './Equalizer';
-import { Heart, Share2, SkipBack, SkipForward, Play, Pause, Repeat, Shuffle } from 'lucide-react';
+import { Heart, Share2, SkipBack, SkipForward, Play, Pause, Repeat, Shuffle, Settings } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface AudioPlayerProps {
   track: Track;
@@ -34,18 +40,41 @@ export function AudioPlayer({
   const [volume, setVolume] = useState(70);
   const [isRepeating, setIsRepeating] = useState(false);
   const [isShuffle, setIsShuffle] = useState(false);
+  const [selectedSource, setSelectedSource] = useState<AudioSource | null>(null);
   
   const audioRef = useRef<HTMLAudioElement>(null);
   const animationRef = useRef<number>();
 
-  // Reset player when track changes
+  // Initialize audio source
   useEffect(() => {
+    if (track.audioSources && track.audioSources.length > 0) {
+      // Select the highest quality source by default
+      const sortedSources = [...track.audioSources].sort((a, b) => {
+        const qualityOrder = { lossless: 4, high: 3, medium: 2, low: 1 };
+        return (qualityOrder[b.quality || 'medium'] || 0) - (qualityOrder[a.quality || 'medium'] || 0);
+      });
+      setSelectedSource(sortedSources[0]);
+    } else if (track.audioSrc) {
+      // Legacy support
+      setSelectedSource({
+        url: track.audioSrc,
+        format: 'mp3',
+        quality: 'medium'
+      });
+    }
+  }, [track]);
+
+  // Reset player when track or source changes
+  useEffect(() => {
+    if (!selectedSource) return;
+
     setCurrentTime(0);
     setDuration(track.duration || 0);
     
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
+      audioRef.current.src = selectedSource.url;
       
       if (autoPlay) {
         audioRef.current.play()
@@ -55,7 +84,7 @@ export function AudioPlayer({
         setIsPlaying(false);
       }
     }
-  }, [track, autoPlay]);
+  }, [track, selectedSource, autoPlay]);
 
   const togglePlayPause = () => {
     if (!audioRef.current) return;
@@ -120,7 +149,6 @@ export function AudioPlayer({
     <div className={`${className}`}>
       <audio
         ref={audioRef}
-        src={track.audioSrc}
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={handleEnded}
@@ -145,8 +173,35 @@ export function AudioPlayer({
         <div className="min-w-0 flex-1">
           <h4 className="font-semibold text-foreground truncate">{track.title}</h4>
           <p className="text-sm text-neutral-500 dark:text-neutral-400 truncate">{track.artist}</p>
+          {selectedSource && (
+            <p className="text-xs text-neutral-400 dark:text-neutral-500">
+              {selectedSource.format.toUpperCase()} • {selectedSource.quality}
+              {selectedSource.bitrate && ` • ${selectedSource.bitrate}kbps`}
+            </p>
+          )}
         </div>
         <div className="flex items-center space-x-2">
+          {track.audioSources && track.audioSources.length > 1 && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full">
+                  <Settings className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {track.audioSources.map((source, index) => (
+                  <DropdownMenuItem
+                    key={index}
+                    onClick={() => setSelectedSource(source)}
+                    className={selectedSource?.url === source.url ? 'bg-primary/10' : ''}
+                  >
+                    {source.format.toUpperCase()} • {source.quality}
+                    {source.bitrate && ` • ${source.bitrate}kbps`}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
           <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full" onClick={onPrevious}>
             <SkipBack className="h-5 w-5" />
           </Button>

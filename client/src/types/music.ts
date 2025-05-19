@@ -4,8 +4,17 @@ export interface Track {
   artist: string;
   duration: number; // in seconds
   albumArt?: string;
-  audioSrc?: string;
+  audioSrc?: string; // Legacy support
+  audioSources?: AudioSource[]; // New multi-format support
   waveformData?: string;
+  metadata?: {
+    album?: string;
+    year?: number;
+    genre?: string[];
+    bpm?: number;
+    key?: string;
+    isrc?: string;
+  };
 }
 
 export interface Playlist {
@@ -44,4 +53,20 @@ export interface CodeExample {
   title: string;
   code: string;
   active?: boolean;
+}
+
+export interface AudioSource {
+  url: string;
+  format: 'mp3' | 'wav' | 'ogg' | 'm4a' | 'flac';
+  quality?: 'low' | 'medium' | 'high' | 'lossless';
+  bitrate?: number;
+}
+
+export interface Album {
+  id: number;
+  title: string;
+  artist: string;
+  releaseYear?: number;
+  albumArt?: string;
+  tracks: Track[];
 }
