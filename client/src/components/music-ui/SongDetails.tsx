@@ -348,25 +348,25 @@ export function SongDetails({
         </div>
       </CardHeader>
       
-      <CardContent>
-        <Tabs defaultValue="info" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="info">Information</TabsTrigger>
-            <TabsTrigger value="credits">Credits</TabsTrigger>
-            {song.lyrics && <TabsTrigger value="lyrics">Lyrics</TabsTrigger>}
+      <CardContent className="p-0 sm:p-6">
+        <Tabs defaultValue="info" className="w-full">
+          <TabsList className="w-full justify-start overflow-x-auto flex-nowrap border-b rounded-none px-2 sm:px-0">
+            <TabsTrigger value="info" className="data-[state=active]:border-b-2 data-[state=active]:border-primary">Information</TabsTrigger>
+            <TabsTrigger value="credits" className="data-[state=active]:border-b-2 data-[state=active]:border-primary">Credits</TabsTrigger>
+            {song.lyrics && <TabsTrigger value="lyrics" className="data-[state=active]:border-b-2 data-[state=active]:border-primary">Lyrics</TabsTrigger>}
             {song.dspLinks && song.dspLinks.length > 0 && (
-              <TabsTrigger value="streaming">Streaming</TabsTrigger>
+              <TabsTrigger value="streaming" className="data-[state=active]:border-b-2 data-[state=active]:border-primary">Streaming</TabsTrigger>
             )}
             {song.analysis && song.analysis.length > 0 && (
-              <TabsTrigger value="analysis" className="flex items-center gap-1">
+              <TabsTrigger value="analysis" className="flex items-center gap-1 data-[state=active]:border-b-2 data-[state=active]:border-primary">
                 <BarChart2 className="h-3 w-3" />
                 <span>Analysis</span>
               </TabsTrigger>
             )}
           </TabsList>
           
-          <TabsContent value="info" className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+          <TabsContent value="info" className="space-y-4 p-4 sm:p-0 mt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <p className="text-sm font-medium">Album</p>
                 {isEditing ? (
@@ -453,8 +453,8 @@ export function SongDetails({
             </div>
           </TabsContent>
           
-          <TabsContent value="credits" className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+          <TabsContent value="credits" className="space-y-4 p-4 sm:p-0 mt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <p className="text-sm font-medium">Producer</p>
                 {isEditing ? (
