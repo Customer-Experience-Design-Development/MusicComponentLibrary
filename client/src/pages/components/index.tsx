@@ -1,8 +1,8 @@
+
 import { AppHeader } from '@/components/AppHeader';
 import { Sidebar } from '@/components/Sidebar';
 import { PageHeader } from '@/components/PageHeader';
 import { Footer } from '@/components/Footer';
-import { NavCategory } from '@/types/music';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Link } from 'wouter';
 import {
@@ -10,116 +10,85 @@ import {
   Music2,
   BarChart3,
   BookOpen,
-  BookText,
   Radio,
-  Disc,
   LayoutGrid,
   Activity,
   Volume2,
-  SlidersHorizontal,
-  ArrowRight,
+  Mic2,
+  Search,
+  PlayCircle,
+  Calendar,
+  ArrowRight
 } from 'lucide-react';
 
 export default function ComponentsIndex() {
-  // Sidebar categories
-  
-
-  // Footer categories
-  const footerCategories = [
-    {
-      title: "Resources",
-      links: [
-        { label: "Documentation", href: "/documentation" },
-        { label: "API Reference", href: "/api" },
-        { label: "Tutorials", href: "/tutorials" },
-        { label: "Examples", href: "/examples" }
-      ]
-    },
-    {
-      title: "Community",
-      links: [
-        { label: "GitHub", href: "https://github.com/musicui" },
-        { label: "Discord", href: "https://discord.gg/musicui" },
-        { label: "Twitter", href: "https://twitter.com/musicui" }
-      ]
-    },
-    {
-      title: "Legal",
-      links: [
-        { label: "Privacy Policy", href: "/privacy" },
-        { label: "Terms of Service", href: "/terms" },
-        { label: "License", href: "/license" }
-      ]
-    }
-  ];
-
-  // Social links
-  const socialLinks = [
-    { icon: "ri-twitter-fill", href: "https://twitter.com/musicui" },
-    { icon: "ri-github-fill", href: "https://github.com/musicui" },
-    { icon: "ri-discord-fill", href: "https://discord.gg/musicui" }
-  ];
-
-  // Component categories
   const componentCategories = [
     {
       title: "Core Audio",
       description: "Essential components for audio playback and control",
       icon: <Music2 className="h-8 w-8 text-primary" />,
       components: [
-        { name: "Audio Player", path: "/components/audio-player", description: "Full-featured audio player with waveform visualization" },
-        { name: "Mini Player", path: "/components/mini-player", description: "Compact audio player for space-constrained UIs" },
-        { name: "Volume Control", path: "/components/volume-control", description: "Audio volume adjustment with visual feedback" },
+        { name: "Audio Player", path: "/components/audio-player", description: "Full-featured audio player with controls" },
+        { name: "Mini Player", path: "/components/mini-player", description: "Compact audio player for minimal interfaces" },
+        { name: "Volume Control", path: "/components/volume-control", description: "Audio volume adjustment component" },
+        { name: "Song Detail Player", path: "/components/song-detail-player", description: "Detailed audio player with metadata" },
+        { name: "Song Card Player", path: "/components/song-card-player", description: "Card-based audio player component" }
       ]
     },
     {
       title: "Visualization",
-      description: "Components for visualizing audio data and music",
+      description: "Components for visualizing audio data",
       icon: <Activity className="h-8 w-8 text-primary" />,
       components: [
-        { name: "Visualizer", path: "/components/visualizer", description: "Real-time audio visualization with multiple styles" },
-        { name: "Waveform", path: "/components/waveform", description: "Static and interactive audio waveform display" },
-        { name: "Equalizer", path: "/components/equalizer", description: "Visual representation of audio frequencies" },
+        { name: "Visualizer", path: "/components/visualizer", description: "Real-time audio visualization" },
+        { name: "Waveform", path: "/components/waveform", description: "Audio waveform display" },
+        { name: "Equalizer", path: "/components/equalizer", description: "Audio frequency visualization" }
       ]
     },
     {
-      title: "Collection Management",
-      description: "Components for organizing and displaying music collections",
+      title: "Media Management",
+      description: "Components for organizing music collections",
       icon: <LayoutGrid className="h-8 w-8 text-primary" />,
       components: [
-        { name: "Album Grid", path: "/components/album-grid", description: "Grid-based display for album collections" },
-        { name: "Playlist", path: "/components/playlist", description: "Ordered list of tracks with playback controls" },
-        { name: "Media Card", path: "/components/media-card", description: "Display card for individual tracks or albums" },
+        { name: "Album Grid", path: "/components/album-grid", description: "Grid layout for album collections" },
+        { name: "Playlist", path: "/components/playlist", description: "Playlist management component" },
+        { name: "Media Card", path: "/components/media-card", description: "Media information display card" }
       ]
     },
     {
-      title: "Artist Tools",
-      description: "Components for artists to monitor and manage their music",
+      title: "Search & Discovery",
+      description: "Components for finding and exploring music",
+      icon: <Search className="h-8 w-8 text-primary" />,
+      components: [
+        { name: "Song Search", path: "/components/song-search", description: "Music search interface" },
+        { name: "Song Details", path: "/components/song-details", description: "Detailed song information" },
+        { name: "Song Lyrics", path: "/components/song-lyrics", description: "Lyrics display component" },
+        { name: "Song Lyrics Search", path: "/components/song-lyrics-search", description: "Lyrics search interface" }
+      ]
+    },
+    {
+      title: "Analytics",
+      description: "Components for music performance tracking",
       icon: <BarChart3 className="h-8 w-8 text-primary" />,
       components: [
-        { name: "Performance Chart", path: "/components/performance-chart", description: "Data visualization for streaming and engagement metrics" },
-        { name: "Release Calendar", path: "/components/release-calendar", description: "Planning and scheduling tool for music releases" },
-        { name: "Audience Map", path: "/components/audience-map", description: "Geographic visualization of listener distribution" },
+        { name: "Performance Chart", path: "/components/performance-chart", description: "Music metrics visualization" },
+        { name: "Release Calendar", path: "/components/release-calendar", description: "Release schedule management" }
       ]
     },
     {
       title: "Education",
-      description: "Components for music education and theory",
+      description: "Components for music education",
       icon: <BookOpen className="h-8 w-8 text-primary" />,
       components: [
-        { name: "Theory Visualizer", path: "/components/theory-visualizer", description: "Interactive visualization of music theory concepts" },
-        { name: "Practice Timer", path: "/components/practice-timer", description: "Specialized timer for music practice sessions" },
-        { name: "Notation Display", path: "/components/notation-display", description: "Sheet music and notation rendering" },
+        { name: "Theory Visualizer", path: "/components/theory-visualizer", description: "Music theory visualization" }
       ]
     },
     {
       title: "Industry",
-      description: "Components for music industry professionals",
+      description: "Components for music business",
       icon: <CircleDollarSign className="h-8 w-8 text-primary" />,
       components: [
-        { name: "Rights Manager", path: "/components/rights-manager", description: "Interface for managing music rights and licensing" },
-        { name: "Contract Viewer", path: "/components/contract-viewer", description: "Specialized document viewer for music contracts" },
-        { name: "Royalty Calculator", path: "/components/royalty-calculator", description: "Tool for calculating and visualizing royalty splits" },
+        { name: "Rights Manager", path: "/components/rights-manager", description: "Music rights management interface" }
       ]
     }
   ];
@@ -151,7 +120,7 @@ export default function ComponentsIndex() {
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {category.components.map((component, j) => (
                       <Link key={j} href={component.path}>
                         <Card className="h-full cursor-pointer hover:border-primary transition-colors group">
@@ -180,8 +149,27 @@ export default function ComponentsIndex() {
       </div>
       
       <Footer 
-        categories={footerCategories} 
-        socialLinks={socialLinks} 
+        categories={[
+          {
+            title: "Documentation",
+            links: [
+              { label: "Getting Started", href: "/docs/introduction" },
+              { label: "API Reference", href: "/docs/api" },
+              { label: "Examples", href: "/docs/examples" }
+            ]
+          },
+          {
+            title: "Resources",
+            links: [
+              { label: "GitHub", href: "https://github.com/musicui" },
+              { label: "Discord", href: "https://discord.gg/musicui" }
+            ]
+          }
+        ]}
+        socialLinks={[
+          { icon: "ri-github-fill", href: "https://github.com/musicui" },
+          { icon: "ri-discord-fill", href: "https://discord.gg/musicui" }
+        ]}
       />
     </div>
   );
