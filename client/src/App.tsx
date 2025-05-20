@@ -34,6 +34,7 @@ import DesignSystem from "@/pages/design-system";
 import PlatformsPage from "@/pages/resources/platforms";
 import AccessibilityPage from "@/pages/resources/accessibility";
 import NotFound from "@/pages/not-found";
+import LyricDashboardPage from "@/pages/components/lyric-dashboard";
 
 function Router() {
   return (
@@ -42,22 +43,22 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/components" component={ComponentsIndex} />
       <Route path="/components/showcase" component={ComponentShowcase} />
-      
+
       {/* Core audio components */}
       <Route path="/components/audio-player" component={AudioPlayerPage} />
       <Route path="/components/volume-control" component={VolumeControlPage} />
       <Route path="/components/equalizer" component={EqualizerPage} />
       <Route path="/components/waveform" component={WaveformPage} />
       <Route path="/components/visualizer" component={VisualizerPage} />
-      
+
       {/* Playback and media components */}
       <Route path="/components/playlist" component={PlaylistPage} />
       <Route path="/components/media-card" component={MediaCardPage} />
       <Route path="/components/mini-player" component={MiniPlayerPage} />
       <Route path="/components/song-detail-player" component={SongDetailPlayerPage} />
       <Route path="/components/song-card-player" component={SongCardPlayerPage} />
-      
-      
+      <Route path="/components/lyric-dashboard" component={LyricDashboardPage} />
+
       {/* Industry and analytics components */}
       <Route path="/components/rights-manager" component={RightsManagerPage} />
       <Route path="/components/theory-visualizer" component={TheoryVisualizerPage} />
@@ -70,7 +71,7 @@ function Router() {
       <Route path="/components/song-lyrics" component={SongLyricsPage} />
       <Route path="/components/song-search" component={SongSearchPage} />
       <Route path="/components/song-lyrics-search" component={SongLyricsSearchPage} />
-      
+
       {/* Resource pages */}
       <Route path="/resources/platforms" component={PlatformsPage} />
       <Route path="/resources/figma" component={ComponentsIndex} />
@@ -78,7 +79,7 @@ function Router() {
       <Route path="/resources/changelog" component={ComponentsIndex} />
       <Route path="/documentation" component={Documentation} />
       <Route path="/design-system" component={DesignSystem} />
-      
+
       {/* Fallback to 404 */}
       <Route component={NotFound} />
     </Switch>
