@@ -111,46 +111,6 @@ export function SongCardPlayer({ track, className = '', onSelect }: SongCardPlay
             <Heart className={`h-4 w-4 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
           </Button>
         </div>
-
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground">
-              {formatTime(currentTime)}
-            </span>
-            <Slider
-              value={[currentTime]}
-              max={track.duration}
-              step={1}
-              onValueChange={handleSeek}
-              className="flex-1"
-            />
-            <span className="text-xs text-muted-foreground">
-              {formatTime(track.duration)}
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-6 w-6"
-              onClick={toggleMute}
-            >
-              {isMuted ? (
-                <VolumeX className="h-3 w-3" />
-              ) : (
-                <Volume2 className="h-3 w-3" />
-              )}
-            </Button>
-            <Slider
-              value={[volume]}
-              max={100}
-              step={1}
-              onValueChange={handleVolumeChange}
-              className="w-20"
-            />
-          </div>
-        </div>
       </div>
 
       <audio

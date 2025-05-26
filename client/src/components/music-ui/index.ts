@@ -6,6 +6,11 @@ export { Playlist } from './Playlist';
 export { Visualizer } from './Visualizer';
 export { VolumeControl } from './VolumeControl';
 export { Waveform } from './Waveform';
+export { TimelineComments } from './TimelineComments';
+export { SongLyrics } from './SongLyrics';
+export { StemPlayer } from './StemPlayer';
+export { MashupCreator } from './MashupCreator';
+export { MobileMashupCreator } from './MobileMashupCreator';
 
 // New Components
 export { MiniPlayer } from './MiniPlayer';
@@ -18,5 +23,17 @@ export { TheoryVisualizer } from './education/TheoryVisualizer';
 // Industry Components
 export { RightsManager } from './industry/RightsManager';
 
+// Component exports
+export { ArtistDetails } from './ArtistDetails';
+export { AlbumDetails } from './AlbumDetails';
+export { SongDetails } from './SongDetails';
+export { SongSearch } from './SongSearch';
+export { SongLyricsSearch } from './SongLyricsSearch';
+export { ReleaseCalendar } from './ReleaseCalendar';
+export { WhisperTranscriber } from './WhisperTranscriber';
+export { SongCardPlayer } from './SongCardPlayer';
+
 // Type Re-exports
 export type { Track, Playlist as PlaylistType, Album } from '@/types/music';
+export type { TimelineComment, TimelineReaction } from './types';
+export type { EnhancedAlbum, AlbumFile } from './AlbumDetails';

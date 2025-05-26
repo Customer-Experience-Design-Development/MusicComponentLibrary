@@ -28,7 +28,7 @@ interface SearchResult {
 
 export function SongLyricsSearch({ songs, className = '' }: SongLyricsSearchProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedSong, setSelectedSong] = useState<string>('');
+  const [selectedSong, setSelectedSong] = useState<string>('all');
   const [copied, setCopied] = useState(false);
 
   const searchResults = useMemo(() => {
@@ -40,7 +40,7 @@ export function SongLyricsSearch({ songs, className = '' }: SongLyricsSearchProp
     const query = searchQuery.toLowerCase();
 
     songs.forEach(song => {
-      if (selectedSong && song.id !== selectedSong) {
+      if (selectedSong !== 'all' && song.id !== selectedSong) {
         return;
       }
 
@@ -103,7 +103,7 @@ export function SongLyricsSearch({ songs, className = '' }: SongLyricsSearchProp
             <SelectValue placeholder="Filter by song" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Songs</SelectItem>
+            <SelectItem value="all">All Songs</SelectItem>
             {songs.map(song => (
               <SelectItem key={song.id} value={song.id}>
                 {song.title} - {song.artist}

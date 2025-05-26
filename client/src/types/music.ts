@@ -70,3 +70,72 @@ export interface Album {
   albumArt?: string;
   tracks: Track[];
 }
+
+export interface Artist {
+  id: string;
+  name: string;
+  bio?: string;
+  imageUrl?: string;
+  headerImageUrl?: string;
+  genres?: string[];
+  formationYear?: number;
+  origin?: string;
+  website?: string;
+  social?: {
+    spotify?: string;
+    instagram?: string;
+    twitter?: string;
+    facebook?: string;
+    youtube?: string;
+    soundcloud?: string;
+    bandcamp?: string;
+    [key: string]: string | undefined;
+  };
+  monthlyListeners?: number;
+  topTracks?: Track[];
+  albums?: Album[];
+  relatedArtists?: {
+    id: string;
+    name: string;
+    imageUrl?: string;
+  }[];
+  achievements?: {
+    name: string;
+    date: string;
+    description?: string;
+    icon?: string;
+  }[];
+  analytics?: {
+    listeningTrends?: {
+      period: string;
+      value: number;
+    }[];
+    demographics?: {
+      ageRange: string;
+      percentage: number;
+    }[];
+    topRegions?: {
+      name: string;
+      value: number;
+    }[];
+    [key: string]: any;
+  };
+  tags?: string[];
+  news?: NewsFeedItem[];
+}
+
+export interface NewsFeedItem {
+  id: string;
+  source: 'instagram' | 'twitter' | 'facebook' | 'spotify' | 'youtube' | 'soundcloud' | 'bandcamp' | 'article' | 'release' | 'tour' | 'other';
+  title?: string;
+  content: string;
+  date: string;
+  url?: string;
+  imageUrl?: string;
+  videoUrl?: string;
+  likes?: number;
+  shares?: number;
+  comments?: number;
+  isVerified?: boolean;
+  isPinned?: boolean;
+}
