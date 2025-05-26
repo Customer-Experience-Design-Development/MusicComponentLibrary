@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -25,7 +25,17 @@ import {
   Undo,
   Redo,
   Check,
-  X
+  X,
+  Clock,
+  PlayCircle,
+  Mic,
+  FileText,
+  ChevronDown,
+  ChevronUp,
+  Plus,
+  BookOpen,
+  Highlighter,
+  TimerReset
 } from 'lucide-react';
 import {
   Tooltip,
@@ -41,6 +51,23 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { LyricalAnalysis } from './analysis/LyricalAnalysis';
+import { Badge } from '@/components/ui/badge';
+import { TimelineComments } from './TimelineComments';
+import { TimelineComment, TimelineReaction } from './types';
+import { v4 as uuidv4 } from 'uuid';
+
+interface TranscriptionSegment {
+  start: number;
+  end: number;
+  text: string;
+  confidence: number;
+}
+
+interface Transcription {
+  language: string;
+  confidence: number;
+  segments: TranscriptionSegment[];
+}
 
 interface Annotation {
   id: string;
@@ -75,12 +102,22 @@ interface SongLyricsProps {
     title: string;
     artist: string;
     lyrics: string;
+    transcription?: Transcription;
   };
   className?: string;
   isEditable?: boolean;
   onSave?: (lyrics: string) => void;
   onAnnotationAdd?: (annotation: Annotation) => void;
   onAnnotationDelete?: (annotationId: string) => void;
+  audioRef?: React.RefObject<HTMLAudioElement>;
+  onSeekAudio?: (timeInSeconds: number) => void;
+  showTimelineComments?: boolean;
+  initialComments?: TimelineComment[];
+  currentUser?: {
+    id: string;
+    name: string;
+    avatar?: string;
+  };
 }
 
 export function SongLyrics({
@@ -89,7 +126,12 @@ export function SongLyrics({
   isEditable = false,
   onSave,
   onAnnotationAdd,
-  onAnnotationDelete
+  onAnnotationDelete,
+  audioRef,
+  onSeekAudio,
+  showTimelineComments = false,
+  initialComments = [],
+  currentUser = { id: 'user-1', name: 'Guest User' },
 }: SongLyricsProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [copied, setCopied] = useState(false);
@@ -107,6 +149,15 @@ export function SongLyrics({
   const [selection, setSelection] = useState<{ start: number; end: number; text: string } | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState<number | null>(null);
+  const [viewMode, setViewMode] = useState<'standard' | 'transcription'>('standard');
+  const [showTimelinePanel, setShowTimelinePanel] = useState(showTimelineComments);
+  const [comments, setComments] = useState<TimelineComment[]>(initialComments);
+  const [currentTime, setCurrentTime] = useState(0);
+  
+  const lyricsRef = useRef<HTMLDivElement>(null);
+  const resultRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const selectedLineRef = useRef<HTMLDivElement>(null);
 
   const { filteredLyrics, matches } = useMemo(() => {
     if (!searchQuery.trim()) {
@@ -133,6 +184,12 @@ export function SongLyrics({
       matches
     };
   }, [editedLyrics, searchQuery]);
+
+  const formatTime = (timeInSeconds: number): string => {
+    const minutes = Math.floor(timeInSeconds / 60);
+    const seconds = Math.floor(timeInSeconds % 60);
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  };
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(editedLyrics);
@@ -257,320 +314,571 @@ export function SongLyrics({
     }
   };
 
+  const handleSeekToSegment = (timeInSeconds: number) => {
+    if (onSeekAudio) {
+      onSeekAudio(timeInSeconds);
+    }
+  };
+
   const getLineAnnotations = (lineNumber: number) => {
     return annotations.filter(a => a.lineNumber === lineNumber);
   };
 
+  const hasTranscription = song.transcription && song.transcription.segments && song.transcription.segments.length > 0;
+
+  useEffect(() => {
+    if (audioRef?.current) {
+      const handleTimeUpdate = () => {
+        if (audioRef.current) {
+          setCurrentTime(audioRef.current.currentTime);
+        }
+      };
+      
+      audioRef.current.addEventListener('timeupdate', handleTimeUpdate);
+      
+      return () => {
+        audioRef.current?.removeEventListener('timeupdate', handleTimeUpdate);
+      };
+    }
+  }, [audioRef]);
+
+  const handleAddComment = (comment: Omit<TimelineComment, 'id' | 'createdAt'>) => {
+    const newComment: TimelineComment = {
+      ...comment,
+      id: uuidv4(),
+      createdAt: new Date().toISOString(),
+    };
+    setComments(prev => [...prev, newComment]);
+  };
+
+  const handleAddReaction = (commentId: string, reaction: Omit<TimelineReaction, 'id' | 'count' | 'users'>) => {
+    setComments(prev => {
+      return prev.map(comment => {
+        if (comment.id === commentId) {
+          // Check if this reaction type already exists
+          const existingReactionIndex = comment.reactions?.findIndex(r => r.emoji === reaction.emoji);
+          
+          if (existingReactionIndex !== undefined && existingReactionIndex >= 0 && comment.reactions) {
+            // Update existing reaction
+            const updatedReactions = [...comment.reactions];
+            const existingReaction = updatedReactions[existingReactionIndex];
+            
+            // Don't add duplicate user reactions
+            if (!existingReaction.users.includes(currentUser.id)) {
+              updatedReactions[existingReactionIndex] = {
+                ...existingReaction,
+                count: existingReaction.count + 1,
+                users: [...existingReaction.users, currentUser.id]
+              };
+            }
+            
+            return { ...comment, reactions: updatedReactions };
+          } else {
+            // Add new reaction type
+            return {
+              ...comment,
+              reactions: [
+                ...(comment.reactions || []),
+                {
+                  id: uuidv4(),
+                  emoji: reaction.emoji,
+                  count: 1,
+                  users: [currentUser.id]
+                }
+              ]
+            };
+          }
+        } else if (comment.replies) {
+          // Check in replies
+          const updatedReplies = comment.replies.map(reply => {
+            if (reply.id === commentId) {
+              const existingReactionIndex = reply.reactions?.findIndex(r => r.emoji === reaction.emoji);
+              
+              if (existingReactionIndex !== undefined && existingReactionIndex >= 0 && reply.reactions) {
+                const updatedReactions = [...reply.reactions];
+                const existingReaction = updatedReactions[existingReactionIndex];
+                
+                if (!existingReaction.users.includes(currentUser.id)) {
+                  updatedReactions[existingReactionIndex] = {
+                    ...existingReaction,
+                    count: existingReaction.count + 1,
+                    users: [...existingReaction.users, currentUser.id]
+                  };
+                }
+                
+                return { ...reply, reactions: updatedReactions };
+              } else {
+                return {
+                  ...reply,
+                  reactions: [
+                    ...(reply.reactions || []),
+                    {
+                      id: uuidv4(),
+                      emoji: reaction.emoji,
+                      count: 1,
+                      users: [currentUser.id]
+                    }
+                  ]
+                };
+              }
+            }
+            return reply;
+          });
+          
+          return { ...comment, replies: updatedReplies };
+        }
+        
+        return comment;
+      });
+    });
+  };
+
+  const handleReply = (commentId: string, reply: Omit<TimelineComment, 'id' | 'createdAt'>) => {
+    const newReply: TimelineComment = {
+      ...reply,
+      id: uuidv4(),
+      createdAt: new Date().toISOString()
+    };
+    
+    setComments(prev => {
+      return prev.map(comment => {
+        if (comment.id === commentId) {
+          return {
+            ...comment,
+            replies: [...(comment.replies || []), newReply]
+          };
+        }
+        return comment;
+      });
+    });
+  };
+
+  const handleDeleteComment = (commentId: string) => {
+    setComments(prev => {
+      // First check if it's a top-level comment
+      const filteredComments = prev.filter(c => c.id !== commentId);
+      
+      // If lengths are the same, it might be a reply
+      if (filteredComments.length === prev.length) {
+        return prev.map(comment => {
+          if (comment.replies && comment.replies.length > 0) {
+            return {
+              ...comment,
+              replies: comment.replies.filter(reply => reply.id !== commentId)
+            };
+          }
+          return comment;
+        });
+      }
+      
+      return filteredComments;
+    });
+  };
+
+  const matchLyricLineToTimestamp = (timestamp: number): number | null => {
+    if (!song.transcription || !song.transcription.segments) {
+      return null;
+    }
+    
+    // Find the segment that contains this timestamp
+    const segment = song.transcription.segments.find(
+      seg => timestamp >= seg.start && timestamp <= seg.end
+    );
+    
+    if (!segment) {
+      return null;
+    }
+    
+    // Now try to find which line in the lyrics this corresponds to
+    const lyricsLines = song.lyrics.split('\n');
+    const lineIndex = lyricsLines.findIndex(line => 
+      line.trim().toLowerCase().includes(segment.text.trim().toLowerCase())
+    );
+    
+    return lineIndex >= 0 ? lineIndex : null;
+  };
+
+  const handleTimelineSeek = (timeInSeconds: number) => {
+    if (onSeekAudio) {
+      onSeekAudio(timeInSeconds);
+    }
+    
+    // Also highlight the corresponding line in the lyrics if possible
+    const lineIndex = matchLyricLineToTimestamp(timeInSeconds);
+    if (lineIndex !== null) {
+      setSelectedLine(lineIndex);
+      scrollToLine(lineIndex);
+    }
+  };
+
+  const scrollToLine = (lineIndex: number) => {
+    if (lyricsRef.current && resultRefs.current[lineIndex]) {
+      const lineElement = resultRefs.current[lineIndex];
+      if (lineElement) {
+        lineElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }
+    }
+  };
+
   return (
-    <Card className={className}>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div className="space-y-1">
-            <CardTitle className="text-2xl">{song.title}</CardTitle>
-            <p className="text-sm text-neutral-500">{song.artist}</p>
+    <div className={`${className}`}>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center space-x-2">
+          {song.transcription && (
+            <Tabs 
+              value={viewMode} 
+              onValueChange={(value) => setViewMode(value as 'standard' | 'transcription')}
+              className="w-auto"
+            >
+              <TabsList className="h-8">
+                <TabsTrigger value="standard" className="h-8 px-3">
+                  <FileText className="h-4 w-4 mr-1" />
+                  Standard
+                </TabsTrigger>
+                <TabsTrigger value="transcription" className="h-8 px-3">
+                  <Clock className="h-4 w-4 mr-1" />
+                  Timestamped
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          )}
+        </div>
+        
+        <div className="flex items-center space-x-2">
+          {isEditable && !isEditing && (
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={handleEdit}
+            >
+              <Edit2 className="h-4 w-4 mr-1" />
+              Edit
+            </Button>
+          )}
+          
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              setSearchQuery('');
+              searchInputRef.current?.focus();
+            }}
+          >
+            <Search className="h-4 w-4 mr-1" />
+            Search
+          </Button>
+          
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleCopy}
+          >
+            {copied ? <Check className="h-4 w-4 mr-1" /> : <Copy className="h-4 w-4 mr-1" />}
+            {copied ? 'Copied' : 'Copy'}
+          </Button>
+          
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowAnalysis(!showAnalysis)}
+          >
+            <Tag className="h-4 w-4 mr-1" />
+            Analysis
+          </Button>
+          
+          {showTimelineComments && (
+            <Button
+              variant={showTimelinePanel ? "secondary" : "outline"}
+              size="sm"
+              onClick={() => setShowTimelinePanel(!showTimelinePanel)}
+            >
+              <MessageSquare className="h-4 w-4 mr-1" />
+              Comments
+              {comments.length > 0 && (
+                <span className="ml-1 bg-primary text-white rounded-full h-4 w-4 flex items-center justify-center text-xs">
+                  {comments.length}
+                </span>
+              )}
+            </Button>
+          )}
+        </div>
+      </div>
+      
+      {searchQuery.length > 0 && (
+        <div className="bg-muted rounded-md p-2 mb-4 flex items-center justify-between">
+          <div className="flex items-center">
+            <Search className="h-4 w-4 mr-2 text-muted-foreground" />
+            <span className="text-sm">
+              {matches.length} {matches.length === 1 ? 'match' : 'matches'} for "{searchQuery}"
+            </span>
           </div>
-          <div className="flex gap-2">
-            {isEditable && !isEditing && (
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button 
-                      variant="outline" 
-                      size="icon"
-                      onClick={handleEdit}
-                    >
-                      <Edit2 className="h-4 w-4" />
+          <div className="flex space-x-1">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-6 w-6" 
+              disabled={matches.length === 0}
+              onClick={() => {
+                // Navigate to previous match
+                if (matches.length > 0) {
+                  const currentIndex = selectedLine !== null ? matches.indexOf(selectedLine) : -1;
+                  const prevIndex = currentIndex > 0 ? currentIndex - 1 : matches.length - 1;
+                  setSelectedLine(matches[prevIndex]);
+                  scrollToLine(matches[prevIndex]);
+                }
+              }}
+            >
+              <ChevronUp className="h-4 w-4" />
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-6 w-6"
+              disabled={matches.length === 0}
+              onClick={() => {
+                // Navigate to next match
+                if (matches.length > 0) {
+                  const currentIndex = selectedLine !== null ? matches.indexOf(selectedLine) : -1;
+                  const nextIndex = currentIndex < matches.length - 1 ? currentIndex + 1 : 0;
+                  setSelectedLine(matches[nextIndex]);
+                  scrollToLine(matches[nextIndex]);
+                }
+              }}
+            >
+              <ChevronDown className="h-4 w-4" />
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-6 w-6"
+              onClick={() => setSearchQuery('')}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      )}
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <div className="relative">
+            <Input
+              type="text"
+              placeholder="Search lyrics..."
+              className="mb-4"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              ref={searchInputRef}
+            />
+          
+            <div 
+              ref={lyricsRef}
+              className="rounded-md border p-4 h-[500px] relative overflow-auto bg-card"
+            >
+              {isEditing ? (
+                <div className="h-full flex flex-col">
+                  <Textarea 
+                    value={editedLyrics}
+                    onChange={(e) => setEditedLyrics(e.target.value)}
+                    className="h-full resize-none font-mono text-sm flex-1"
+                  />
+                  <div className="flex justify-end space-x-2 mt-4">
+                    <Button variant="outline" onClick={handleCancel}>
+                      Cancel
                     </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Edit lyrics</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )}
-            {isEditable && isEditing && (
-              <>
-                <Button 
-                  variant="outline" 
-                  size="icon"
-                  onClick={handleSave}
-                >
-                  <Save className="h-4 w-4" />
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="icon"
-                  onClick={handleCancel}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </>
-            )}
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button 
-                    variant="outline" 
-                    size="icon"
-                    onClick={handleCopy}
-                  >
-                    <Copy className={`h-4 w-4 ${copied ? 'text-primary' : ''}`} />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{copied ? 'Copied!' : 'Copy lyrics'}</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            <Button variant="outline" size="icon">
-              <Download className="h-4 w-4" />
-            </Button>
-            <Button variant="outline" size="icon">
-              <Share2 className="h-4 w-4" />
-            </Button>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <History className="h-4 w-4" />
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Version History</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                  {versions.map(version => (
-                    <div key={version.id} className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span>{version.author}</span>
-                        <span>{new Date(version.timestamp).toLocaleString()}</span>
+                    <Button onClick={handleSave}>
+                      <Save className="h-4 w-4 mr-1" />
+                      Save
+                    </Button>
+                  </div>
+                </div>
+              ) : viewMode === 'transcription' && song.transcription ? (
+                <div className="space-y-1">
+                  {song.transcription.segments.map((segment, i) => (
+                    <div
+                      key={i}
+                      className="flex items-start hover:bg-accent/50 p-2 rounded-sm cursor-pointer"
+                      onClick={() => handleSeekToSegment(segment.start)}
+                    >
+                      <div className="text-xs font-mono text-blue-500 w-16">
+                        {formatTime(segment.start)}
                       </div>
-                      <div className="text-sm text-neutral-500">
-                        {version.changes.join(', ')}
+                      <div className="flex-1">
+                        <p className="text-sm">{segment.text}</p>
+                        <div className="flex items-center mt-1">
+                          <div 
+                            className="h-1 rounded-full" 
+                            style={{ 
+                              width: `${segment.confidence * 100}%`,
+                              backgroundColor: segment.confidence > 0.8 
+                                ? 'rgb(34, 197, 94)' 
+                                : segment.confidence > 0.6 
+                                ? 'rgb(234, 179, 8)' 
+                                : 'rgb(239, 68, 68)'
+                            }}
+                          />
+                          <span className="ml-2 text-xs text-muted-foreground">
+                            {Math.round(segment.confidence * 100)}%
+                          </span>
+                        </div>
                       </div>
                     </div>
                   ))}
                 </div>
-              </DialogContent>
-            </Dialog>
-            <Button 
-              variant="outline" 
-              size="icon"
-              onClick={() => setShowAnalysis(!showAnalysis)}
-            >
-              <Tag className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-      </CardHeader>
-      
-      <CardContent>
-        <div className="space-y-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-neutral-500" />
-            <Input
-              type="text"
-              placeholder="Search lyrics..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9"
-            />
-          </div>
-          
-          {searchQuery && (
-            <p className="text-sm text-neutral-500">
-              Found {matches.length} {matches.length === 1 ? 'match' : 'matches'}
-            </p>
-          )}
-          
-          {isEditing ? (
-            <Textarea
-              value={editedLyrics}
-              onChange={(e) => setEditedLyrics(e.target.value)}
-              className="min-h-[400px] font-mono"
-            />
-          ) : (
-            <div className="prose dark:prose-invert max-w-none">
-              {filteredLyrics.split('\n').map((line, index) => {
-                const lineAnnotations = getLineAnnotations(index);
-                const artistAnnotation = lineAnnotations.find(a => a.type === 'artist');
-                const isSelected = selection && index >= selection.start && index <= selection.end;
-                
-                return (
-                  <div key={index} className="group relative">
-                    <p 
-                      className={`text-sm cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-800 px-2 py-1 rounded ${
-                        matches.includes(index) 
-                          ? 'bg-primary/10 text-primary' 
-                          : ''
-                      } ${artistAnnotation ? 'border-l-4' : ''} ${
-                        isSelected ? 'bg-primary/20' : ''
-                      }`}
-                      style={{
-                        borderLeftColor: artistAnnotation?.artist?.color
-                      }}
-                      onMouseDown={(e) => handleMouseDown(e, index)}
-                      onMouseMove={(e) => handleMouseMove(e, index)}
-                      onMouseUp={(e) => handleMouseUp(e, index)}
-                    >
-                      {line}
-                    </p>
-                    {lineAnnotations.length > 0 && (
-                      <div className="absolute right-0 top-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Button variant="ghost" size="icon" className="h-6 w-6">
-                          <MessageSquare className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    )}
-                    {lineAnnotations.map(annotation => (
+              ) : (
+                <div className="space-y-1">
+                  {filteredLyrics.split('\n').map((line, i) => {
+                    const lineAnnotations = getLineAnnotations(i);
+                    const hasAnnotations = lineAnnotations.length > 0;
+                    const isSelected = selectedLine === i;
+                    const isMatch = searchQuery.length > 0 && line.toLowerCase().includes(searchQuery.toLowerCase());
+                    
+                    // Highlight search term in the line
+                    let highlightedLine = line;
+                    if (isMatch && searchQuery.length > 0) {
+                      const regex = new RegExp(`(${searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+                      highlightedLine = line.replace(regex, '<mark>$1</mark>');
+                    }
+                    
+                    return (
                       <div 
-                        key={annotation.id}
-                        className={`ml-4 mt-1 p-2 rounded text-sm ${
-                          annotation.type === 'artist' 
-                            ? 'bg-opacity-10' 
-                            : 'bg-neutral-100 dark:bg-neutral-800'
+                        key={i}
+                        ref={isSelected ? selectedLineRef : null}
+                        className={`relative group p-2 rounded-sm transition-colors ${
+                          isSelected 
+                            ? 'bg-primary/10' 
+                            : isMatch 
+                            ? 'bg-yellow-100 dark:bg-yellow-900/30' 
+                            : 'hover:bg-accent/50'
                         }`}
-                        style={{
-                          backgroundColor: annotation.type === 'artist' 
-                            ? `${annotation.artist?.color}20` 
-                            : undefined
-                        }}
+                        onMouseDown={(e) => handleMouseDown(e, i)}
+                        onMouseMove={(e) => handleMouseMove(e, i)}
+                        onMouseUp={(e) => handleMouseUp(e, i)}
+                        onClick={() => handleLineClick(i)}
                       >
-                        <div className="flex justify-between items-start mb-1">
-                          <div className="space-y-1">
-                            <span className="font-medium">{annotation.author}</span>
-                            {annotation.type === 'artist' && (
-                              <div className="flex items-center gap-2">
-                                <span 
-                                  className="w-3 h-3 rounded-full"
-                                  style={{ backgroundColor: annotation.artist?.color }}
-                                />
-                                <span className="font-medium">{annotation.artist?.name}</span>
-                                {annotation.artist?.role && (
-                                  <span className="text-xs text-neutral-500">
-                                    ({annotation.artist.role})
-                                  </span>
-                                )}
-                              </div>
+                        <div className="flex items-start">
+                          <span className="text-xs font-mono text-muted-foreground w-8">
+                            {i + 1}
+                          </span>
+                          <div className="flex-1 relative">
+                            {line.trim() === '' ? (
+                              <span className="text-muted-foreground">&nbsp;</span>
+                            ) : (
+                              <span 
+                                dangerouslySetInnerHTML={{ __html: highlightedLine }}
+                                ref={(el) => {
+                                  if (isMatch) {
+                                    resultRefs.current[i] = el;
+                                  }
+                                }}
+                              />
                             )}
                           </div>
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="h-4 w-4"
-                            onClick={() => handleDeleteAnnotation(annotation.id)}
-                          >
-                            <X className="h-3 w-3" />
-                          </Button>
+                          {isEditable && (
+                            <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-6 w-6"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedLine(i);
+                                  setAnnotationContent('');
+                                  setAnnotationType('comment');
+                                }}
+                              >
+                                <MessageSquare className="h-3 w-3" />
+                              </Button>
+                            </div>
+                          )}
                         </div>
-                        {annotation.type !== 'artist' && (
-                          <>
-                            {annotation.selection && (
-                              <div className="mb-2 p-2 bg-neutral-200 dark:bg-neutral-700 rounded text-sm">
-                                {annotation.selection.text}
+                        
+                        {hasAnnotations && (
+                          <div className="mt-1 ml-8 space-y-1">
+                            {lineAnnotations.map(annotation => (
+                              <div 
+                                key={annotation.id}
+                                className={`text-xs p-2 rounded-md ${
+                                  annotation.type === 'comment'
+                                    ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
+                                    : annotation.type === 'suggestion'
+                                    ? 'bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-300'
+                                    : annotation.type === 'correction'
+                                    ? 'bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-300'
+                                    : 'bg-purple-50 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300'
+                                }`}
+                              >
+                                <div className="flex justify-between items-start">
+                                  <div className="font-medium">
+                                    {annotation.type === 'artist' && annotation.artist
+                                      ? (
+                                        <span 
+                                          className="inline-block h-3 w-3 rounded-full mr-1"
+                                          style={{ backgroundColor: annotation.artist.color }}
+                                        />
+                                      )
+                                      : null
+                                    }
+                                    {annotation.type === 'artist' && annotation.artist
+                                      ? `${annotation.artist.name} (${annotation.artist.role || 'Artist'})`
+                                      : annotation.type.charAt(0).toUpperCase() + annotation.type.slice(1)
+                                    }
+                                  </div>
+                                  {onAnnotationDelete && (
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      className="h-4 w-4 -mt-1 -mr-1"
+                                      onClick={() => handleDeleteAnnotation(annotation.id)}
+                                    >
+                                      <X className="h-3 w-3" />
+                                    </Button>
+                                  )}
+                                </div>
+                                <p className="mt-1">{annotation.content}</p>
                               </div>
-                            )}
-                            <p className="text-neutral-600 dark:text-neutral-400">
-                              {annotation.content}
-                            </p>
-                          </>
+                            ))}
+                          </div>
                         )}
-                        <p className="text-xs text-neutral-500 mt-1">
-                          {new Date(annotation.timestamp).toLocaleString()}
-                        </p>
                       </div>
-                    ))}
-                  </div>
-                );
-              })}
+                    );
+                  })}
+                </div>
+              )}
             </div>
-          )}
-          
-          {selectedLine !== null && !isEditing && (
-            <div className="fixed bottom-4 right-4 w-96 bg-background border rounded-lg shadow-lg p-4">
-              <div className="flex justify-between items-center mb-2">
-                <h4 className="font-medium">Add Annotation</h4>
-                <Button 
-                  variant="ghost" 
-                  size="icon"
-                  onClick={() => {
-                    setSelectedLine(null);
-                    setSelection(null);
-                  }}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-              <div className="space-y-2">
-                {selection && (
-                  <div className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded text-sm mb-2">
-                    <p className="text-xs text-neutral-500 mb-1">Selected text:</p>
-                    <p className="text-neutral-600 dark:text-neutral-400">{selection.text}</p>
-                  </div>
-                )}
-                <Select
-                  value={annotationType}
-                  onValueChange={(value: Annotation['type']) => setAnnotationType(value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Annotation type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="comment">Comment</SelectItem>
-                    <SelectItem value="suggestion">Suggestion</SelectItem>
-                    <SelectItem value="correction">Correction</SelectItem>
-                    <SelectItem value="artist">Artist Attribution</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                {annotationType === 'artist' ? (
-                  <>
-                    <Input
-                      value={annotationArtist}
-                      onChange={(e) => setAnnotationArtist(e.target.value)}
-                      placeholder="Artist name"
-                    />
-                    <Input
-                      value={annotationRole}
-                      onChange={(e) => setAnnotationRole(e.target.value)}
-                      placeholder="Role (e.g., Lead Vocals, Backing Vocals)"
-                    />
-                    <div className="flex items-center gap-2">
-                      <Input
-                        type="color"
-                        value={annotationColor}
-                        onChange={(e) => setAnnotationColor(e.target.value)}
-                        className="w-12 h-8 p-1"
-                      />
-                      <span className="text-sm text-neutral-500">Artist color</span>
-                    </div>
-                  </>
-                ) : (
-                  <Textarea
-                    value={annotationContent}
-                    onChange={(e) => setAnnotationContent(e.target.value)}
-                    placeholder="Write your annotation..."
-                    className="min-h-[100px]"
-                  />
-                )}
-
-                <Button 
-                  className="w-full"
-                  onClick={handleAddAnnotation}
-                >
-                  Add {annotationType === 'artist' ? 'Artist Attribution' : 'Annotation'}
-                </Button>
-              </div>
-            </div>
-          )}
+          </div>
           
           {showAnalysis && (
-            <div className="mt-8">
-              <LyricalAnalysis lyrics={editedLyrics} />
-            </div>
+            <Card className="mt-4">
+              <CardHeader className="py-4">
+                <CardTitle className="text-base">Lyrical Analysis</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <LyricalAnalysis lyrics={editedLyrics} />
+              </CardContent>
+            </Card>
           )}
         </div>
-      </CardContent>
-    </Card>
+        
+        {showTimelinePanel && (
+          <div className="rounded-md border p-4 h-[500px] overflow-auto bg-card">
+            <TimelineComments 
+              duration={audioRef?.current?.duration || 300}
+              currentTime={audioRef?.current?.currentTime || 0}
+              comments={comments}
+              onAddComment={handleAddComment}
+              onAddReaction={handleAddReaction}
+              onSeekAudio={handleTimelineSeek}
+              onReply={handleReply}
+              onDelete={handleDeleteComment}
+              currentUser={currentUser}
+            />
+          </div>
+        )}
+      </div>
+    </div>
   );
 } 

@@ -26,8 +26,9 @@ import SongLyricsPage from "@/pages/components/song-lyrics";
 import SongSearchPage from "@/pages/components/song-search";
 import SongLyricsSearchPage from "@/pages/components/song-lyrics-search";
 import ReleaseCalendarPage from "@/pages/components/release-calendar";
-import SongDetailPlayerPage from "@/pages/components/song-detail-player";
 import SongCardPlayerPage from "@/pages/components/song-card-player";
+import ArtistDetailsPage from "@/pages/components/artist-details";
+import AlbumDetailsPage from "@/pages/components/album-details";
 // Resource pages
 import Documentation from "@/pages/documentation";
 import DesignSystem from "@/pages/design-system";
@@ -54,7 +55,6 @@ function Router() {
       <Route path="/components/playlist" component={PlaylistPage} />
       <Route path="/components/media-card" component={MediaCardPage} />
       <Route path="/components/mini-player" component={MiniPlayerPage} />
-      <Route path="/components/song-detail-player" component={SongDetailPlayerPage} />
       <Route path="/components/song-card-player" component={SongCardPlayerPage} />
       
       
@@ -70,6 +70,8 @@ function Router() {
       <Route path="/components/song-lyrics" component={SongLyricsPage} />
       <Route path="/components/song-search" component={SongSearchPage} />
       <Route path="/components/song-lyrics-search" component={SongLyricsSearchPage} />
+      <Route path="/components/artist-details" component={ArtistDetailsPage} />
+      <Route path="/components/album-details" component={AlbumDetailsPage} />
       
       {/* Resource pages */}
       <Route path="/resources/platforms" component={PlatformsPage} />

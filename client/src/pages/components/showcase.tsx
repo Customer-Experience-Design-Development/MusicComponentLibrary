@@ -14,22 +14,124 @@ import {
   Equalizer,
   Waveform,
   TheoryVisualizer,
-  RightsManager
+  RightsManager,
+  StemPlayer,
+  MashupCreator
 } from '@/components/music-ui';
 import type { Track } from '@/types/music';
+import { useToast } from '@/hooks/use-toast';
 
 export default function ComponentShowcase() {
   const [activeTab, setActiveTab] = useState('core');
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { toast } = useToast();
+  
   const [currentTrack, setCurrentTrack] = useState<Track>({
     id: 1,
     title: "Midnight Groove",
     artist: "The Sound Collective",
     duration: 196,
     albumArt: "https://picsum.photos/seed/track1/200/200",
-    audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+    audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+    metadata: {
+      bpm: 120,
+      key: "Am"
+    }
   });
+  
+  const vocalTrack: Track = {
+    id: 2,
+    title: "Vocal Dreams",
+    artist: "Voice Harmony",
+    duration: 210,
+    albumArt: "https://picsum.photos/seed/track2/200/200",
+    audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+    metadata: {
+      bpm: 128,
+      key: "C"
+    }
+  };
+  
   const [isPlaying, setIsPlaying] = useState(false);
+  
+  // Sample stems for the StemPlayer
+  const stems = [
+    {
+      name: "Drums",
+      source: {
+        url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+        format: "mp3" as const,
+        quality: "high" as const
+      },
+      volume: 100,
+      muted: false
+    },
+    {
+      name: "Bass",
+      source: {
+        url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+        format: "mp3" as const,
+        quality: "high" as const
+      },
+      volume: 90,
+      muted: false
+    }
+  ];
+  
+  // Sample stems for the MashupCreator
+  const vocalStems = [
+    {
+      name: "Lead Vocals",
+      source: {
+        url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+        format: "mp3" as const,
+        quality: "high" as const
+      },
+      volume: 100,
+      muted: false,
+      trackId: 2,
+      type: 'vocal' as const
+    },
+    {
+      name: "Backing Vocals",
+      source: {
+        url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+        format: "mp3" as const,
+        quality: "high" as const
+      },
+      volume: 80,
+      muted: false,
+      trackId: 2,
+      type: 'vocal' as const
+    }
+  ];
+  
+  const instrumentalStems = [
+    {
+      name: "Drums",
+      source: {
+        url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+        format: "mp3" as const,
+        quality: "high" as const
+      },
+      volume: 100,
+      muted: false,
+      trackId: 1,
+      type: 'instrumental' as const
+    },
+    {
+      name: "Bass",
+      source: {
+        url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+        format: "mp3" as const,
+        quality: "high" as const
+      },
+      volume: 90,
+      muted: false,
+      trackId: 1,
+      type: 'instrumental' as const
+    }
+  ];
   
   // Sample tracks
   const tracks: Track[] = [
@@ -185,6 +287,14 @@ export default function ComponentShowcase() {
     setIsPlaying(playing);
   };
   
+  const handleSaveMashup = (mashupData: any) => {
+    console.log('Mashup saved:', mashupData);
+    toast({
+      title: "Mashup Saved",
+      description: `Created mashup of "${vocalTrack.title}" vocals with "${currentTrack.title}" instrumentals`,
+    });
+  };
+  
   return (
     <div className="min-h-screen flex flex-col">
       <AppHeader />
@@ -228,6 +338,34 @@ export default function ComponentShowcase() {
                     track={currentTrack} 
                     onTogglePlay={handleTogglePlay}
                     autoPlay={false}
+                  />
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle>Stem Player</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <StemPlayer
+                    track={currentTrack}
+                    stems={stems}
+                    showWaveform={true}
+                  />
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle>Mashup Creator</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <MashupCreator
+                    vocalTrack={vocalTrack}
+                    instrumentalTrack={currentTrack}
+                    vocalStems={vocalStems}
+                    instrumentalStems={instrumentalStems}
+                    onSave={handleSaveMashup}
                   />
                 </CardContent>
               </Card>
