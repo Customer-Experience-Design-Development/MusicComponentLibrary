@@ -66,7 +66,7 @@ export function Footer({ categories, socialLinks, className = '' }: FooterProps)
 
         <div className="border-t border-neutral-200 dark:border-neutral-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-neutral-500 dark:text-neutral-400">
-            &copy; {new Date().getFullYear()} MusicUI. All rights reserved.
+            &copy; {new Date().getFullYear()} Customer Experience Design & Development. All rights reserved.
           </p>
           <div className="mt-4 md:mt-0">
             <select className="bg-card border rounded-md text-sm py-1 px-2">
