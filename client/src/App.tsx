@@ -4,6 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/lib/theme-provider";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { useEffect } from "react";
 
 // Page imports
@@ -119,6 +120,10 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="light">
         <TooltipProvider>
+          <GoogleAnalytics 
+            gtmId={import.meta.env.VITE_GTM_ID}
+            gtagId={import.meta.env.VITE_GA_ID}
+          />
           <Toaster />
           <Router />
         </TooltipProvider>
