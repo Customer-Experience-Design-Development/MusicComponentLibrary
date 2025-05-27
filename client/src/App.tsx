@@ -35,7 +35,7 @@ import DesignSystem from "@/pages/design-system";
 import PlatformsPage from "@/pages/resources/platforms";
 import AccessibilityPage from "@/pages/resources/accessibility";
 import NotFound from "@/pages/not-found";
-import LyricDashboardPage from "@/pages/components/lyric-dashboard";
+// import LyricDashboardPage from "@/pages/components/lyric-dashboard";
 
 function Router() {
   return (
@@ -60,10 +60,10 @@ function Router() {
         path="/components/song-card-player"
         component={SongCardPlayerPage}
       />
-      <Route
+      {/* <Route
         path="/components/lyric-dashboard"
         component={LyricDashboardPage}
-      />
+      /> */}
 
       {/* Industry and analytics components */}
       <Route path="/components/rights-manager" component={RightsManagerPage} />
