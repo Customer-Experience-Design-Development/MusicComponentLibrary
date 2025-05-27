@@ -48,12 +48,12 @@ export function AppHeader({ user }: AppHeaderProps) {
         </div>
         
         <div className="flex items-center space-x-3">
-          <Button variant="ghost" size="icon" className="rounded-full hidden md:flex">
+          {/* <Button variant="ghost" size="icon" className="rounded-full hidden md:flex">
             <Search className="h-5 w-5" />
-          </Button>
-          <Button variant="ghost" size="icon" className="rounded-full hidden md:flex">
+          </Button> */}
+          {/* <Button variant="ghost" size="icon" className="rounded-full hidden md:flex">
             <Github className="h-5 w-5" />
-          </Button>
+          </Button> */}
           <ThemeToggle />
           
           {/* Mobile Menu */}
@@ -76,23 +76,23 @@ export function AppHeader({ user }: AppHeaderProps) {
                     </span>
                   </Link>
                 ))}
-                <div className="border-t pt-4 mt-4">
+                {/* <div className="border-t pt-4 mt-4">
                   <Link href="https://github.com/musicui" onClick={() => setMobileMenuOpen(false)}>
                     <span className="flex items-center text-foreground hover:text-primary dark:hover:text-primary transition cursor-pointer py-2">
                       <Github className="h-4 w-4 mr-2" />
                       GitHub
                     </span>
                   </Link>
-                </div>
+                </div> */}
               </nav>
             </SheetContent>
           </Sheet>
           
-          {user && (
+          {/* {user && (
             <Avatar className="h-8 w-8 bg-primary text-white">
               <AvatarFallback>{user.initials}</AvatarFallback>
             </Avatar>
-          )}
+          )} */}
         </div>
       </div>
     </header>
