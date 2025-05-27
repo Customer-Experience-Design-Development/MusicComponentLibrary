@@ -45,7 +45,7 @@ export function Footer({ categories, socialLinks, className = '' }: FooterProps)
               ))}
             </div>
           </div>
-          
+
           {categories.map((category, index) => (
             <div className="col-span-1" key={index}>
               <h3 className="font-medium text-sm uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-4">
@@ -54,19 +54,16 @@ export function Footer({ categories, socialLinks, className = '' }: FooterProps)
               <ul className="space-y-2">
                 {category.links.map((link, linkIndex) => (
                   <li key={linkIndex}>
-                    <a 
-                      href={link.href} 
-                      className="text-sm hover:text-primary transition"
-                    >
+                    <Link key={link.href} href={link.href} className="text-sm text-foreground/60 hover:text-foreground transition-colors cursor-pointer">
                       {link.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
             </div>
           ))}
         </div>
-        
+
         <div className="border-t border-neutral-200 dark:border-neutral-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-neutral-500 dark:text-neutral-400">
             &copy; {new Date().getFullYear()} MusicUI. All rights reserved.
