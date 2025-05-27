@@ -4,6 +4,7 @@ import { navigate } from "wouter/use-browser-location";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useState, useEffect } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface SidebarProps {
   activePath: string;
@@ -140,8 +141,9 @@ export function Sidebar({ activePath, className = '', onLinkClick }: SidebarProp
 
   return (
     <aside className="col-span-12 lg:col-span-3 lg:pr-8">
-      <div className="sticky top-20">
-        {categories.map((category, index) => (
+      <div className="sticky top-20 h-[calc(100vh-5rem)]">
+        <ScrollArea className="h-full pr-4">
+          {categories.map((category, index) => (
           <div className="mb-6" key={index}>
             <div 
               className="flex items-center justify-between text-sm font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 cursor-pointer"
@@ -234,6 +236,7 @@ export function Sidebar({ activePath, className = '', onLinkClick }: SidebarProp
             )}
           </div>
         ))}
+        </ScrollArea>
       </div>
     </aside>
   );
