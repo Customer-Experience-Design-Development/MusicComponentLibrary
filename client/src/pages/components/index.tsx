@@ -24,15 +24,14 @@ import {
 export default function ComponentsIndex() {
   const componentCategories = [
     {
-      title: "Core Audio",
+      title: "Playback",
       description: "Essential components for audio playback and control",
       icon: <Music2 className="h-8 w-8 text-primary" />,
       components: [
         { name: "Audio Player", path: "/components/audio-player", description: "Full-featured audio player with controls" },
         { name: "Mini Player", path: "/components/mini-player", description: "Compact audio player for minimal interfaces" },
-        { name: "Volume Control", path: "/components/volume-control", description: "Audio volume adjustment component" },
-        { name: "Song Detail Player", path: "/components/song-detail-player", description: "Detailed audio player with metadata" },
-        { name: "Song Card Player", path: "/components/song-card-player", description: "Card-based audio player component" }
+        { name: "Song Card Player", path: "/components/song-card-player", description: "Card-based audio player component" },
+        { name: "Volume Control", path: "/components/volume-control", description: "Audio volume adjustment component" }
       ]
     },
     {
@@ -42,28 +41,19 @@ export default function ComponentsIndex() {
       components: [
         { name: "Visualizer", path: "/components/visualizer", description: "Real-time audio visualization" },
         { name: "Waveform", path: "/components/waveform", description: "Audio waveform display" },
-        { name: "Equalizer", path: "/components/equalizer", description: "Audio frequency visualization" }
+        { name: "Equalizer", path: "/components/equalizer", description: "Audio frequency visualization" },
+        { name: "Theory Visualizer", path: "/components/theory-visualizer", description: "Music theory visualization" }
       ]
     },
     {
-      title: "Media Management",
+      title: "Collections",
       description: "Components for organizing music collections",
       icon: <LayoutGrid className="h-8 w-8 text-primary" />,
       components: [
-        { name: "Album Grid", path: "/components/album-grid", description: "Grid layout for album collections" },
         { name: "Playlist", path: "/components/playlist", description: "Playlist management component" },
-        { name: "Media Card", path: "/components/media-card", description: "Media information display card" }
-      ]
-    },
-    {
-      title: "Search & Discovery",
-      description: "Components for finding and exploring music",
-      icon: <Search className="h-8 w-8 text-primary" />,
-      components: [
-        { name: "Song Search", path: "/components/song-search", description: "Music search interface" },
-        { name: "Song Details", path: "/components/song-details", description: "Detailed song information" },
-        { name: "Song Lyrics", path: "/components/song-lyrics", description: "Lyrics display component" },
-        { name: "Song Lyrics Search", path: "/components/song-lyrics-search", description: "Lyrics search interface" }
+        { name: "Album Grid", path: "/components/album-grid", description: "Grid layout for album collections" },
+        { name: "Media Card", path: "/components/media-card", description: "Media information display card" },
+        { name: "Release Calendar", path: "/components/release-calendar", description: "Release schedule management" }
       ]
     },
     {
@@ -71,24 +61,27 @@ export default function ComponentsIndex() {
       description: "Components for music performance tracking",
       icon: <BarChart3 className="h-8 w-8 text-primary" />,
       components: [
-        { name: "Performance Chart", path: "/components/performance-chart", description: "Music metrics visualization" },
-        { name: "Release Calendar", path: "/components/release-calendar", description: "Release schedule management" }
+        { name: "Performance Chart", path: "/components/performance-chart", description: "Music metrics visualization" }
       ]
     },
     {
-      title: "Education",
-      description: "Components for music education",
+      title: "Search",
+      description: "Components for finding and exploring music",
+      icon: <Search className="h-8 w-8 text-primary" />,
+      components: [
+        { name: "Song Search", path: "/components/song-search", description: "Music search interface" },
+        { name: "Song Lyrics Search", path: "/components/song-lyrics-search", description: "Lyrics search interface" }
+      ]
+    },
+    {
+      title: "Details",
+      description: "Components for displaying detailed information",
       icon: <BookOpen className="h-8 w-8 text-primary" />,
       components: [
-        { name: "Theory Visualizer", path: "/components/theory-visualizer", description: "Music theory visualization" }
-      ]
-    },
-    {
-      title: "Industry",
-      description: "Components for music business",
-      icon: <CircleDollarSign className="h-8 w-8 text-primary" />,
-      components: [
-        { name: "Rights Manager", path: "/components/rights-manager", description: "Music rights management interface" }
+        { name: "Song Details", path: "/components/song-details", description: "Detailed song information" },
+        { name: "Artist Details", path: "/components/artist-details", description: "Detailed artist information" },
+        { name: "Album Details", path: "/components/album-details", description: "Detailed album information" },
+        { name: "Song Lyrics", path: "/components/song-lyrics", description: "Lyrics display component" }
       ]
     }
   ];
