@@ -14,39 +14,7 @@ import { FileType, StemSubtype } from '@/components/music-ui/SongDetails';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Album, Track } from '@/types/music';
 
-const footerCategories = [
-  {
-    title: "Resources",
-    links: [
-      { label: "Documentation", href: "/documentation" },
-      { label: "API Reference", href: "/api" },
-      { label: "Tutorials", href: "/tutorials" },
-      { label: "Examples", href: "/examples" }
-    ]
-  },
-  {
-    title: "Community",
-    links: [
-      { label: "GitHub", href: "https://github.com/musicui" },
-      { label: "Discord", href: "https://discord.gg/musicui" },
-      { label: "Twitter", href: "https://twitter.com/musicui" }
-    ]
-  },
-  {
-    title: "Legal",
-    links: [
-      { label: "Privacy Policy", href: "/privacy" },
-      { label: "Terms of Service", href: "/terms" },
-      { label: "License", href: "/license" }
-    ]
-  }
-];
 
-const socialLinks = [
-  { icon: "ri-twitter-fill", href: "https://twitter.com/musicui" },
-  { icon: "ri-github-fill", href: "https://github.com/musicui" },
-  { icon: "ri-discord-fill", href: "https://discord.gg/musicui" }
-];
 
 // Demo tracks
 const demoTracks: Track[] = [
@@ -713,10 +681,7 @@ export default function AlbumDetailsPage() {
         </div>
       </div>
       
-      <Footer 
-        categories={footerCategories} 
-        socialLinks={socialLinks} 
-      />
+      <Footer />
       
       {/* Hidden audio element for playback */}
       <audio ref={audioRef} className="hidden" />

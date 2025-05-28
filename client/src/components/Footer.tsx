@@ -11,12 +11,50 @@ interface FooterCategory {
 }
 
 interface FooterProps {
-  categories: FooterCategory[];
-  socialLinks: { icon: string; href: string }[];
+  categories?: FooterCategory[];
+  socialLinks?: { icon: string; href: string }[];
   className?: string;
 }
 
-export function Footer({ categories, socialLinks, className = '' }: FooterProps) {
+const defaultCategories: FooterCategory[] = [
+  {
+    title: "Resources",
+    links: [
+      { label: "Documentation", href: "/documentation" },
+      { label: "API Reference", href: "/api" },
+      { label: "Tutorials", href: "/tutorials" },
+      { label: "Examples", href: "/examples" }
+    ]
+  },
+  {
+    title: "Community",
+    links: [
+      { label: "GitHub", href: "https://github.com/musicui" },
+      { label: "Discord", href: "https://discord.gg/musicui" },
+      { label: "Twitter", href: "https://twitter.com/musicui" }
+    ]
+  },
+  {
+    title: "Legal",
+    links: [
+      { label: "Privacy Policy", href: "/privacy" },
+      { label: "Terms of Service", href: "/terms" },
+      { label: "License", href: "/license" }
+    ]
+  }
+];
+
+const defaultSocialLinks = [
+  { icon: "ri-twitter-fill", href: "https://twitter.com/musicui" },
+  { icon: "ri-github-fill", href: "https://github.com/musicui" },
+  { icon: "ri-discord-fill", href: "https://discord.gg/musicui" }
+];
+
+export function Footer({ 
+  categories = defaultCategories, 
+  socialLinks = defaultSocialLinks, 
+  className = '' 
+}: FooterProps) {
   return (
     <footer className={`bg-background border-t border-neutral-200 dark:border-neutral-800 mt-16 ${className}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
