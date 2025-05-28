@@ -29,9 +29,8 @@ const defaultCategories: FooterCategory[] = [
   {
     title: "Community",
     links: [
-      { label: "GitHub", href: "https://github.com/musicui" },
-      { label: "Discord", href: "https://discord.gg/musicui" },
-      { label: "Twitter", href: "https://twitter.com/musicui" }
+      { label: "GitHub", href: "https://github.com/Customer-Experience-Design-Development/MusicComponentLibrary" },
+      { label: "Discord", href: "https://discord.gg/5P3Gzn7v64" }
     ]
   },
   {
@@ -45,9 +44,8 @@ const defaultCategories: FooterCategory[] = [
 ];
 
 const defaultSocialLinks = [
-  { icon: "ri-twitter-fill", href: "https://twitter.com/musicui" },
-  { icon: "ri-github-fill", href: "https://github.com/musicui" },
-  { icon: "ri-discord-fill", href: "https://discord.gg/musicui" }
+  { icon: "ri-github-fill", href: "https://github.com/Customer-Experience-Design-Development/MusicComponentLibrary" },
+  { icon: "ri-discord-fill", href: "https://discord.gg/5P3Gzn7v64" }
 ];
 
 export function Footer({ 
@@ -70,7 +68,7 @@ export function Footer({
               A comprehensive UI component library for building beautiful music applications.
             </p>
             <div className="flex space-x-4">
-              {socialLinks.map((link, index) => (
+              {defaultSocialLinks.map((link, index) => (
                 <a 
                   key={index}
                   href={link.href} 
@@ -84,7 +82,7 @@ export function Footer({
             </div>
           </div>
 
-          {categories.map((category, index) => (
+          {defaultCategories.map((category, index) => (
             <div className="col-span-1" key={index}>
               <h3 className="font-medium text-sm uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-4">
                 {category.title}

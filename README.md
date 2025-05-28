@@ -25,8 +25,8 @@ A comprehensive library of React components specifically designed for music appl
 Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/musicui-component-library.git
-cd musicui-component-library
+git clone https://github.com/Customer-Experience-Design-Development/MusicComponentLibrary.git
+cd MusicComponentLibrary
 ```
 
 Install dependencies:
@@ -37,12 +37,6 @@ npm install
 
 ### Running the Development Server
 
-For Replit development:
-
-```bash
-npm run dev
-```
-
 For local development (port 3000):
 
 ```bash
@@ -50,7 +44,6 @@ npm run local-dev
 ```
 
 The application will be available at:
-- **Replit**: `https://your-repl-url.replit.dev` (port 5000)
 - **Local**: `http://localhost:3000`
 
 ### Building for Production
@@ -103,15 +96,6 @@ npm start
 - **Routing**: Wouter
 - **State Management**: TanStack Query
 
-## 📖 Documentation
-
-Visit our comprehensive documentation to learn more:
-
-- [Component Showcase](./client/src/pages/components/showcase.tsx) - Live examples of all components
-- [Design System](./client/src/pages/design-system.tsx) - Design principles and guidelines
-- [Accessibility Guide](./client/src/pages/resources/accessibility.tsx) - Accessibility best practices
-- [Platform Support](./client/src/pages/resources/platforms.tsx) - Cross-platform compatibility
-
 ## 🏗️ Project Structure
 
 ```
@@ -148,7 +132,7 @@ Visit our comprehensive documentation to learn more:
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+We welcome contributions!
 
 ### Development Workflow
 
@@ -160,31 +144,19 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 6. Push to the branch: `git push origin feature/amazing-feature`
 7. Open a Pull Request
 
-### Reporting Issues
-
-Please use our [Issue Template](.github/ISSUE_TEMPLATE.md) when reporting bugs or requesting features.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## 🙏 Acknowledgments
 
 - [Radix UI](https://www.radix-ui.com/) for accessible component primitives
 - [Tailwind CSS](https://tailwindcss.com/) for utility-first styling
 - [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) for audio processing capabilities
-- All our [contributors](CONTRIBUTORS.md) who have helped build this library
 
 ## 📞 Support
 
-- 📧 Email: support@musicui.dev
-- 💬 Discord: [Join our community](https://discord.gg/musicui)
-- 📖 Documentation: [docs.musicui.dev](https://docs.musicui.dev)
-- 🐛 Issues: [GitHub Issues](https://github.com/yourusername/musicui-component-library/issues)
+- 📧 Email: info@ced.dev
+- 💬 Discord: [Join our community](https://discord.gg/5P3Gzn7v64)
 
 ## 🗺️ Roadmap
 
-- [ ] Vue.js component library
 - [ ] Flutter/Dart implementation
 - [ ] Native iOS Swift components
 - [ ] Native Android Kotlin components
