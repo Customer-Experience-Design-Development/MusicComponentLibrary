@@ -8,27 +8,36 @@ import { Card } from '@/components/ui/card';
 
 const footerCategories = [
   {
-    title: 'Documentation',
+    title: "Resources",
     links: [
-      { title: 'Getting Started', path: '/docs/introduction' },
-      { title: 'Components', path: '/components' },
-      { title: 'API Reference', path: '/docs/api' },
-    ],
+      { label: "Documentation", href: "/documentation" },
+      { label: "API Reference", href: "/api" },
+      { label: "Tutorials", href: "/tutorials" },
+      { label: "Examples", href: "/examples" }
+    ]
   },
   {
-    title: 'Resources',
+    title: "Community",
     links: [
-      { title: 'GitHub', path: 'https://github.com/yourusername/music-component-library' },
-      { title: 'Discord', path: 'https://discord.gg/your-server' },
-      { title: 'Twitter', path: 'https://twitter.com/your-handle' },
-    ],
+      { label: "GitHub", href: "https://github.com/musicui" },
+      { label: "Discord", href: "https://discord.gg/musicui" },
+      { label: "Twitter", href: "https://twitter.com/musicui" }
+    ]
   },
+  {
+    title: "Legal",
+    links: [
+      { label: "Privacy Policy", href: "/privacy" },
+      { label: "Terms of Service", href: "/terms" },
+      { label: "License", href: "/license" }
+    ]
+  }
 ];
 
 const socialLinks = [
-  { title: 'GitHub', path: 'https://github.com/yourusername/music-component-library' },
-  { title: 'Discord', path: 'https://discord.gg/your-server' },
-  { title: 'Twitter', path: 'https://twitter.com/your-handle' },
+  { icon: "ri-twitter-fill", href: "https://twitter.com/musicui" },
+  { icon: "ri-github-fill", href: "https://github.com/musicui" },
+  { icon: "ri-discord-fill", href: "https://discord.gg/musicui" }
 ];
 
 // Demo data for the PerformanceChart component

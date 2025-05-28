@@ -17,6 +17,10 @@ export { MiniPlayer } from './MiniPlayer';
 export { AlbumGrid } from './AlbumGrid';
 export { PerformanceChart } from './PerformanceChart';
 
+// Analytics Components
+export { OverviewCard, OverviewGroup, CompactOverviewCard } from './AnalyticsOverview';
+export type { AnalyticsData, OverviewCardProps, OverviewGroupProps } from './AnalyticsOverview';
+
 // Education Components
 export { TheoryVisualizer } from './education/TheoryVisualizer';
 
@@ -32,6 +36,12 @@ export { SongLyricsSearch } from './SongLyricsSearch';
 export { ReleaseCalendar } from './ReleaseCalendar';
 export { WhisperTranscriber } from './WhisperTranscriber';
 export { SongCardPlayer } from './SongCardPlayer';
+export { Post } from './Post';
+export { PostFeed } from './PostFeed';
+export { Feed } from './Feed';
+export type { PostProps, PostType, PostPlatform, PostAuthor, PostMedia, PostMetrics, PostAction } from './Post';
+export type { PostFeedProps } from './PostFeed';
+export type { FeedProps, FeedLayout, FeedSource, PaginationType } from './Feed';
 
 // Type Re-exports
 export type { Track, Playlist as PlaylistType, Album } from '@/types/music';
