@@ -5,3 +5,6 @@ server/public
 vite.config.ts.*
 *.tar.gz
 .env.local
+
+CURSOR_TASKS.md
+.replit
