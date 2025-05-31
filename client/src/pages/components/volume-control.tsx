@@ -11,25 +11,25 @@ const footerCategories = [
   {
     title: 'Documentation',
     links: [
-      { title: 'Getting Started', path: '/docs/introduction' },
-      { title: 'Components', path: '/components' },
-      { title: 'API Reference', path: '/docs/api' },
+      { label: 'Getting Started', href: '/docs/introduction' },
+      { label: 'Components', href: '/components' },
+      { label: 'API Reference', href: '/docs/api' },
     ],
   },
   {
     title: 'Resources',
     links: [
-      { title: 'GitHub', path: 'https://github.com/yourusername/music-component-library' },
-      { title: 'Discord', path: 'https://discord.gg/your-server' },
-      { title: 'Twitter', path: 'https://twitter.com/your-handle' },
+      { label: 'GitHub', href: 'https://github.com/yourusername/music-component-library' },
+      { label: 'Discord', href: 'https://discord.gg/your-server' },
+      { label: 'Twitter', href: 'https://twitter.com/your-handle' },
     ],
   },
 ];
 
 const socialLinks = [
-  { title: 'GitHub', path: 'https://github.com/yourusername/music-component-library' },
-  { title: 'Discord', path: 'https://discord.gg/your-server' },
-  { title: 'Twitter', path: 'https://twitter.com/your-handle' },
+  { icon: 'ri-github-fill', href: 'https://github.com/yourusername/music-component-library' },
+  { icon: 'ri-discord-fill', href: 'https://discord.gg/your-server' },
+  { icon: 'ri-twitter-fill', href: 'https://twitter.com/your-handle' },
 ];
 
 export default function VolumeControlPage() {
@@ -52,23 +52,49 @@ export default function VolumeControlPage() {
             description="A versatile volume control component with mute, normalization, and preset options."
           />
           <div className="mt-8">
-            <Tabs defaultValue="preview" className="space-y-4">
-              <TabsList>
-                <TabsTrigger value="preview">Preview</TabsTrigger>
+            <Tabs defaultValue="standard" className="mt-8">
+              <TabsList className="mb-4">
+                <TabsTrigger value="standard">Standard Control</TabsTrigger>
                 <TabsTrigger value="documentation">Documentation</TabsTrigger>
-                <TabsTrigger value="code">Code</TabsTrigger>
               </TabsList>
-              <TabsContent value="preview" className="space-y-4">
+              
+              <TabsContent value="standard" className="space-y-4">
                 <Card className="p-6">
-                  <h3 className="text-lg font-semibold mb-4">Interactive Demo</h3>
-                  <div className="max-w-md mx-auto">
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-sm text-muted-foreground">Current Volume: {volume}%</span>
+                  <h3 className="text-lg font-semibold mb-4">Responsive Volume Control</h3>
+                  <p className="text-sm text-muted-foreground mb-6">
+                    The component automatically adapts its layout based on the container size. It displays a compact layout in small containers and the full layout in larger spaces.
+                  </p>
+                  
+                  <div className="space-y-6">
+                    <div>
+                      <h4 className="text-sm font-medium mb-2">Compact Layout (Small Container)</h4>
+                      <div className="w-32 p-3 border rounded-lg bg-gray-50 dark:bg-gray-900">
+                        <VolumeControl
+                          initialVolume={65}
+                          onChange={handleVolumeChange}
+                        />
+                      </div>
                     </div>
-                    <VolumeControl
-                      initialVolume={70}
-                      onChange={handleVolumeChange}
-                    />
+                    
+                    <div>
+                      <h4 className="text-sm font-medium mb-2">Medium Layout</h4>
+                      <div className="w-48 p-3 border rounded-lg bg-gray-50 dark:bg-gray-900">
+                        <VolumeControl
+                          initialVolume={75}
+                          onChange={handleVolumeChange}
+                        />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="text-sm font-medium mb-2">Full Layout (Large Container)</h4>
+                      <div className="max-w-sm">
+                        <VolumeControl
+                          initialVolume={70}
+                          onChange={handleVolumeChange}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </Card>
               </TabsContent>
@@ -116,41 +142,6 @@ export default function VolumeControlPage() {
                     <li>Consider user preferences for initial volume level.</li>
                     <li>Use volume normalization for consistent playback levels.</li>
                   </ul>
-                </Card>
-              </TabsContent>
-              <TabsContent value="code" className="space-y-4">
-                <Card className="p-6">
-                  <h3 className="text-lg font-semibold mb-4">Example Implementation</h3>
-                  <div className="bg-muted p-4 rounded-lg overflow-x-auto">
-                    <code>
-{`import { VolumeControl } from '@/components/music-ui/VolumeControl';
-import { useState } from 'react';
-
-export default function Example() {
-  const [volume, setVolume] = useState(70);
-
-  const handleVolumeChange = (newVolume: number) => {
-    setVolume(newVolume);
-    // Update audio context or player volume
-    console.log('Volume changed:', newVolume);
-  };
-
-  return (
-    <div className="max-w-md mx-auto">
-      <div className="flex items-center justify-between mb-4">
-        <span className="text-sm text-muted-foreground">
-          Current Volume: {volume}%
-        </span>
-      </div>
-      <VolumeControl
-        initialVolume={70}
-        onChange={handleVolumeChange}
-      />
-    </div>
-  );
-}`}
-                    </code>
-                  </div>
                 </Card>
               </TabsContent>
             </Tabs>

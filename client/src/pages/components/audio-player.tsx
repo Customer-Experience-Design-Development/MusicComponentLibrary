@@ -294,6 +294,7 @@ export default function AudioPlayerPage() {
             <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-8">
               <TabsList className="mb-4">
                 <TabsTrigger value="standard">Standard Player</TabsTrigger>
+                <TabsTrigger value="project">Project Style</TabsTrigger>
                 <TabsTrigger value="comments">Player with Comments</TabsTrigger>
                 <TabsTrigger value="stems">Stem Player</TabsTrigger>
                 <TabsTrigger value="mashup">Mashup Creator</TabsTrigger>
@@ -303,6 +304,19 @@ export default function AudioPlayerPage() {
                 <Card className="p-6">
                   <AudioPlayer track={track} />
                 </Card>
+              </TabsContent>
+              
+              <TabsContent value="project">
+                <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-4">Project-Style Interface</h3>
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+                    Inspired by modern music production interfaces with clean layouts and warm color schemes.
+                  </p>
+                  <AudioPlayer 
+                    track={track} 
+                    showWaveform={true}
+                  />
+                </div>
               </TabsContent>
               
               <TabsContent value="comments">

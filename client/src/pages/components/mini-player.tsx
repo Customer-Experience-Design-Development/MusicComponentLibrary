@@ -12,25 +12,25 @@ const footerCategories = [
   {
     title: 'Documentation',
     links: [
-      { title: 'Getting Started', path: '/docs/introduction' },
-      { title: 'Components', path: '/components' },
-      { title: 'API Reference', path: '/docs/api' },
+      { label: 'Getting Started', href: '/docs/introduction' },
+      { label: 'Components', href: '/components' },
+      { label: 'API Reference', href: '/docs/api' },
     ],
   },
   {
     title: 'Resources',
     links: [
-      { title: 'GitHub', path: 'https://github.com/yourusername/music-component-library' },
-      { title: 'Discord', path: 'https://discord.gg/your-server' },
-      { title: 'Twitter', path: 'https://twitter.com/your-handle' },
+      { label: 'GitHub', href: 'https://github.com/yourusername/music-component-library' },
+      { label: 'Discord', href: 'https://discord.gg/your-server' },
+      { label: 'Twitter', href: 'https://twitter.com/your-handle' },
     ],
   },
 ];
 
 const socialLinks = [
-  { title: 'GitHub', path: 'https://github.com/yourusername/music-component-library' },
-  { title: 'Discord', path: 'https://discord.gg/your-server' },
-  { title: 'Twitter', path: 'https://twitter.com/your-handle' },
+  { icon: 'ri-github-fill', href: 'https://github.com/yourusername/music-component-library' },
+  { icon: 'ri-discord-fill', href: 'https://discord.gg/your-server' },
+  { icon: 'ri-twitter-fill', href: 'https://twitter.com/your-handle' },
 ];
 
 // Demo data for the MiniPlayer component
@@ -80,6 +80,7 @@ export default function MiniPlayerPage() {
             <Tabs defaultValue="preview" className="space-y-4">
               <TabsList>
                 <TabsTrigger value="preview">Preview</TabsTrigger>
+                <TabsTrigger value="project">Project Style</TabsTrigger>
                 <TabsTrigger value="documentation">Documentation</TabsTrigger>
                 <TabsTrigger value="code">Code</TabsTrigger>
               </TabsList>
@@ -97,6 +98,25 @@ export default function MiniPlayerPage() {
                     />
                   </div>
                 </Card>
+              </TabsContent>
+              <TabsContent value="project" className="space-y-4">
+                <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-4">Project-Style Interface</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Modern design with traffic light controls, warm color gradients, and enhanced visual hierarchy.
+                  </p>
+                  <div className="max-w-md mx-auto">
+                    <MiniPlayer
+                      track={currentTrack}
+                      variant="project"
+                      onNext={handleNext}
+                      onPrevious={handlePrevious}
+                      onTogglePlay={handleTogglePlay}
+                      onEnded={handleEnded}
+                      autoPlay={false}
+                    />
+                  </div>
+                </div>
               </TabsContent>
               <TabsContent value="documentation" className="space-y-4">
                 <Card className="p-6">

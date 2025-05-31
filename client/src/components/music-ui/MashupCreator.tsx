@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Track, AudioSource } from '@/types/music';
 import { formatTime } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { VolumeControl } from './VolumeControl';
+import { VolumeControl, StemVolumeControl } from './VolumeControl';
 import { Waveform } from './Waveform';
 import { Play, Pause, SkipBack, Clock, Sliders, Music, Mic, ZoomIn, ZoomOut } from 'lucide-react';
 import {
@@ -449,10 +449,12 @@ export function MashupCreator({
           
           <div className="flex justify-between items-center text-sm text-neutral-500 dark:text-neutral-400">
             <span>{formatTime(currentTime)}</span>
-            <VolumeControl 
-              initialVolume={masterVolume} 
-              onChange={handleMasterVolumeChange}
-            />
+            <div className="w-32">
+              <VolumeControl 
+                initialVolume={masterVolume} 
+                onChange={handleMasterVolumeChange}
+              />
+            </div>
             <span>{formatTime(mashupDuration)}</span>
           </div>
         </TabsContent>
@@ -637,27 +639,16 @@ export function MashupCreator({
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {allStems.filter(stem => stem.type === 'vocal').map((stem) => (
-                    <div key={stem.name} className="flex items-center space-x-4">
-                      <div className="w-24">
-                        <Label className="text-sm">{stem.name}</Label>
-                      </div>
-                      <div className="flex-1">
-                        <Slider
-                          value={[stem.volume]}
-                          min={0}
-                          max={100}
-                          step={1}
-                          onValueChange={(value) => handleStemVolumeChange(stem.name, value[0])}
-                        />
-                      </div>
-                      <Switch
-                        checked={!stem.muted}
-                        onCheckedChange={() => toggleStemMute(stem.name)}
-                        className="ml-2"
-                      />
-                    </div>
+                    <StemVolumeControl
+                      key={stem.name}
+                      name={stem.name}
+                      volume={stem.volume}
+                      muted={stem.muted}
+                      onVolumeChange={(volume) => handleStemVolumeChange(stem.name, volume)}
+                      onMuteToggle={() => toggleStemMute(stem.name)}
+                    />
                   ))}
                 </div>
               </CardContent>
@@ -671,27 +662,16 @@ export function MashupCreator({
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {allStems.filter(stem => stem.type === 'instrumental').map((stem) => (
-                    <div key={stem.name} className="flex items-center space-x-4">
-                      <div className="w-24">
-                        <Label className="text-sm">{stem.name}</Label>
-                      </div>
-                      <div className="flex-1">
-                        <Slider
-                          value={[stem.volume]}
-                          min={0}
-                          max={100}
-                          step={1}
-                          onValueChange={(value) => handleStemVolumeChange(stem.name, value[0])}
-                        />
-                      </div>
-                      <Switch
-                        checked={!stem.muted}
-                        onCheckedChange={() => toggleStemMute(stem.name)}
-                        className="ml-2"
-                      />
-                    </div>
+                    <StemVolumeControl
+                      key={stem.name}
+                      name={stem.name}
+                      volume={stem.volume}
+                      muted={stem.muted}
+                      onVolumeChange={(volume) => handleStemVolumeChange(stem.name, volume)}
+                      onMuteToggle={() => toggleStemMute(stem.name)}
+                    />
                   ))}
                 </div>
               </CardContent>

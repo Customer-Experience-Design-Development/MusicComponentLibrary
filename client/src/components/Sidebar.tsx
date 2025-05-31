@@ -88,6 +88,10 @@ export function Sidebar({ activePath, className = '', onLinkClick }: SidebarProp
       { title: 'Media Card', path: '/components/media-card' },
       { title: 'Release Calendar', path: '/components/release-calendar' },
     ],
+    'Mobile': [
+      { title: 'Mobile UI Showcase', path: '/components/mobile-ui-showcase' },
+      { title: 'Mobile Mashup Creator', path: '/components/mobile-mashup' },
+    ],
     'Analytics': [
       { title: 'Performance Chart', path: '/components/performance-chart' },
       { title: 'Audience Map (Missing)', path: '/components/audience-map' },

@@ -501,6 +501,7 @@ export default function SongDetailsPage() {
               <Tabs value={currentView} onValueChange={setCurrentView} className="space-y-4">
                 <TabsList>
                   <TabsTrigger value="variations">Variations</TabsTrigger>
+                  <TabsTrigger value="project">Project Style</TabsTrigger>
                   <TabsTrigger value="files">File Management</TabsTrigger>
                   <TabsTrigger value="transcription">Transcription Integration</TabsTrigger>
                   <TabsTrigger value="documentation">Documentation</TabsTrigger>
@@ -608,6 +609,23 @@ export default function SongDetailsPage() {
                       onSave={handleSaveUpdatedSong}
                     />
                   </Card>
+                </TabsContent>
+                
+                <TabsContent value="project" className="space-y-8">
+                  <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg">
+                    <h3 className="text-lg font-semibold mb-4">Project-Style Interface</h3>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+                      Inspired by modern music production interfaces with clean layouts, warm color schemes, and intuitive file organization.
+                    </p>
+                    <SongDetails 
+                      song={completeSong}
+                      variant="project"
+                      isEditable={true}
+                      onSave={handleSaveUpdatedSong}
+                      onFileUpload={handleFileUpload}
+                      onFileDelete={handleFileDelete}
+                    />
+                  </div>
                 </TabsContent>
                 
                 <TabsContent value="files" className="space-y-8">

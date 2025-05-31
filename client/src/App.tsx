@@ -31,12 +31,18 @@ import ReleaseCalendarPage from "@/pages/components/release-calendar";
 import SongCardPlayerPage from "@/pages/components/song-card-player";
 import ArtistDetailsPage from "@/pages/components/artist-details";
 import AlbumDetailsPage from "@/pages/components/album-details";
+import MobileUIShowcasePage from "@/pages/components/mobile-ui-showcase";
+import MobileMashupPage from "@/pages/components/mobile-mashup";
 // Resource pages
 import Documentation from "@/pages/documentation";
 import DesignSystem from "@/pages/design-system";
 import PlatformsPage from "@/pages/resources/platforms";
 import AccessibilityPage from "@/pages/resources/accessibility";
 import NotFound from "@/pages/not-found";
+// Import new documentation pages
+import IntroductionPage from "@/pages/docs/introduction";
+import InstallationPage from "@/pages/docs/installation";
+import QuickStartPage from "@/pages/docs/quick-start";
 // import LyricDashboardPage from "@/pages/components/lyric-dashboard";
 
 function Router() {
@@ -100,7 +106,9 @@ function Router() {
       />
       <Route path="/components/artist-details" component={ArtistDetailsPage} />
       <Route path="/components/album-details" component={AlbumDetailsPage} />
-
+      <Route path="/components/mobile-ui-showcase" component={MobileUIShowcasePage} />
+      <Route path="/components/mobile-mashup" component={MobileMashupPage} />
+      
       {/* Resource pages */}
       <Route path="/resources/platforms" component={PlatformsPage} />
       <Route path="/resources/figma" component={ComponentsIndex} />
@@ -108,6 +116,11 @@ function Router() {
       <Route path="/resources/changelog" component={ComponentsIndex} />
       <Route path="/documentation" component={Documentation} />
       <Route path="/design-system" component={DesignSystem} />
+
+      {/* Documentation pages */}
+      <Route path="/docs/introduction" component={IntroductionPage} />
+      <Route path="/docs/installation" component={InstallationPage} />
+      <Route path="/docs/quick-start" component={QuickStartPage} />
 
       {/* Fallback to 404 */}
       <Route component={NotFound} />

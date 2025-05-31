@@ -7,8 +7,9 @@ import { VolumeControl } from './VolumeControl';
 import { Waveform } from './Waveform';
 import { Equalizer } from './Equalizer';
 import { TimelineComments } from './TimelineComments';
-import { Heart, Share2, SkipBack, SkipForward, Play, Pause, Repeat, Shuffle, Settings, MessageSquare } from 'lucide-react';
+import { Heart, Share2, SkipBack, SkipForward, Play, Pause, Repeat, Shuffle, Settings, MessageSquare, MoreHorizontal, Music, ListMusic } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
+import { Card } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -157,10 +158,11 @@ export function AudioPlayer({
     setIsShuffle(!isShuffle);
   };
 
-  const handleSeekAudio = (timeInSeconds: number) => {
-    if (!audioRef.current) return;
-    audioRef.current.currentTime = timeInSeconds;
-    setCurrentTime(timeInSeconds);
+  const handleSeekAudio = (time: number) => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = time;
+      setCurrentTime(time);
+    }
   };
 
   const handleAddComment = (comment: Omit<TimelineComment, 'id' | 'createdAt'>) => {
@@ -275,160 +277,137 @@ export function AudioPlayer({
   };
 
   const handleDeleteComment = (commentId: string) => {
-    setComments(prev => {
-      // First check if it's a top-level comment
-      const filteredComments = prev.filter(c => c.id !== commentId);
-      
-      // If lengths are the same, it might be a reply
-      if (filteredComments.length === prev.length) {
-        return prev.map(comment => {
-          if (comment.replies && comment.replies.length > 0) {
-            return {
-              ...comment,
-              replies: comment.replies.filter(reply => reply.id !== commentId)
-            };
-          }
-          return comment;
-        });
-      }
-      
-      return filteredComments;
-    });
+    setComments(prev => prev.filter(comment => comment.id !== commentId));
   };
 
-  // Create a vinyl-like rotating album cover
-  const vinylStyle = isPlaying ? 'vinyl' : '';
-
   return (
-    <div className={`${className}`}>
-      <audio
-        ref={audioRef}
-        onTimeUpdate={handleTimeUpdate}
-        onLoadedMetadata={handleLoadedMetadata}
-        onEnded={handleEnded}
-        preload="metadata"
-      />
-      
-      <div className="flex items-center space-x-4 mb-6">
-        <div className="flex-shrink-0 relative">
-          <img 
-            src={track.albumArt || `https://via.placeholder.com/64x64?text=${track.title[0]}`} 
-            alt={`${track.title} album artwork`} 
-            className={`w-16 h-16 rounded-md object-cover ${vinylStyle}`}
-          />
-          {isPlaying && (
-            <div className="absolute inset-0 rounded-md border-4 border-white dark:border-neutral-800 overflow-hidden">
-              <div className="absolute inset-0 rounded-full bg-black/80 w-6 h-6 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center">
-                <div className="h-2 w-2 rounded-full bg-white"></div>
-              </div>
+    <div className={`bg-gradient-to-r from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-2xl p-6 shadow-lg border dark:border-gray-700 ${className}`}>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+            Now Playing
+          </h2>
+        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-8 w-8">
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-48">
+            <DropdownMenuItem>
+              <Heart className="h-4 w-4 mr-2" />
+              Add to favorites
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Share2 className="h-4 w-4 mr-2" />
+              Share track
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <ListMusic className="h-4 w-4 mr-2" />
+              Add to playlist
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+
+      {/* Main Content */}
+      <div className="grid grid-cols-12 gap-6">
+        {/* Album Art */}
+        <div className="col-span-12 md:col-span-4">
+          <div className="aspect-square rounded-xl overflow-hidden bg-gradient-to-br from-orange-300 via-orange-400 to-orange-500 shadow-lg flex items-center justify-center">
+            {track.albumArt ? (
+              <img 
+                src={track.albumArt} 
+                alt={track.title}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <Music className="h-24 w-24 text-white/80" />
+            )}
+          </div>
+        </div>
+
+        {/* Track Info & Controls */}
+        <div className="col-span-12 md:col-span-8 space-y-4">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+              {track.title}
+            </h1>
+            <p className="text-lg text-gray-600 dark:text-gray-400 mb-2">
+              {track.artist}
+            </p>
+            <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+              <span>{formatTime(duration)}</span>
+              {track.metadata?.bpm && <span>• {track.metadata.bpm} BPM</span>}
+              {track.metadata?.key && <span>• {track.metadata.key}</span>}
+            </div>
+          </div>
+
+          {/* Waveform */}
+          {showWaveform && (
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border dark:border-gray-700">
+              <Waveform 
+                currentTime={currentTime}
+                duration={duration}
+                onClick={handleSeekAudio}
+              />
             </div>
           )}
-        </div>
-        <div className="min-w-0 flex-1">
-          <h4 className="font-semibold text-foreground truncate">{track.title}</h4>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400 truncate">{track.artist}</p>
-          {selectedSource && (
-            <p className="text-xs text-neutral-400 dark:text-neutral-500">
-              {selectedSource.format.toUpperCase()} • {selectedSource.quality}
-              {selectedSource.bitrate && ` • ${selectedSource.bitrate}kbps`}
-            </p>
-          )}
-        </div>
-        <div className="flex items-center space-x-2">
-          {track.audioSources && track.audioSources.length > 1 && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full">
-                  <Settings className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {track.audioSources.map((source, index) => (
-                  <DropdownMenuItem
-                    key={index}
-                    onClick={() => setSelectedSource(source)}
-                    className={selectedSource?.url === source.url ? 'bg-primary/10' : ''}
-                  >
-                    {source.format.toUpperCase()} • {source.quality}
-                    {source.bitrate && ` • ${source.bitrate}kbps`}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
-          <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full" onClick={onPrevious}>
-            <SkipBack className="h-5 w-5" />
-          </Button>
-          <Button 
-            variant="default" 
-            size="icon" 
-            className="w-10 h-10 rounded-full bg-primary text-white hover:bg-primary/90" 
-            onClick={togglePlayPause}
-          >
-            {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5 ml-0.5" />}
-          </Button>
-          <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full" onClick={onNext}>
-            <SkipForward className="h-5 w-5" />
-          </Button>
-        </div>
-      </div>
-      
-      {showWaveform && (
-        <div className="mb-3">
-          <Waveform
-            data={track.waveformData ? JSON.parse(track.waveformData) : undefined}
-            currentTime={currentTime}
-            duration={duration}
-            onClick={handleWaveformClick}
-          />
-        </div>
-      )}
-      
-      <div className="flex justify-between items-center text-sm text-neutral-500 dark:text-neutral-400">
-        <span>{formatTime(currentTime)}</span>
-        <div className="flex items-center space-x-4">
-          <Button
-            variant="ghost"
-            size="icon"
-            className={`p-1 rounded ${isRepeating ? 'text-primary' : 'hover:text-primary'} transition-colors`}
-            onClick={toggleRepeat}
-          >
-            <Repeat className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className={`p-1 rounded ${isShuffle ? 'text-primary' : 'hover:text-primary'} transition-colors`}
-            onClick={toggleShuffle}
-          >
-            <Shuffle className="h-4 w-4" />
-          </Button>
-          <Button
-            variant={showCommentsPanel ? "secondary" : "ghost"}
-            size="icon"
-            className="p-1 rounded"
-            onClick={() => setShowCommentsPanel(!showCommentsPanel)}
-          >
-            <MessageSquare className="h-4 w-4" />
-            {comments.length > 0 && (
-              <span className="absolute -top-1 -right-1 bg-primary text-white rounded-full h-4 w-4 flex items-center justify-center text-[10px]">
-                {comments.length}
+
+          {/* Main Controls */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onPrevious}
+                className="h-10 w-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                <SkipBack className="h-5 w-5" />
+              </Button>
+              
+              <Button
+                onClick={togglePlayPause}
+                size="icon"
+                className="h-12 w-12 rounded-full bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-100"
+              >
+                {isPlaying ? (
+                  <Pause className="h-6 w-6" />
+                ) : (
+                  <Play className="h-6 w-6 ml-0.5" />
+                )}
+              </Button>
+              
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onNext}
+                className="h-10 w-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                <SkipForward className="h-5 w-5" />
+              </Button>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-500 dark:text-gray-400 tabular-nums">
+                {formatTime(currentTime)}
               </span>
-            )}
-          </Button>
+              <div className="w-24 sm:w-32 lg:w-40">
+                <VolumeControl 
+                  initialVolume={volume} 
+                  onChange={handleVolumeChange} 
+                />
+              </div>
+            </div>
+          </div>
         </div>
-        <span>{formatTime(duration)}</span>
       </div>
-      
-      <div className="flex items-center justify-end mt-4 space-x-4">
-        <VolumeControl 
-          initialVolume={volume} 
-          onChange={handleVolumeChange} 
-        />
-      </div>
-      
-      {showCommentsPanel && (
-        <div className="mt-8 border-t pt-4 dark:border-gray-800">
+
+      {/* Comments Section */}
+      {showComments && (
+        <div className="border-t dark:border-gray-700 pt-6">
           <TimelineComments 
             duration={duration}
             currentTime={currentTime}
@@ -442,6 +421,24 @@ export function AudioPlayer({
           />
         </div>
       )}
+
+      {/* Hidden Audio Element */}
+      <audio
+        ref={audioRef}
+        src={track.audioSrc}
+        onLoadedMetadata={handleLoadedMetadata}
+        onTimeUpdate={handleTimeUpdate}
+        onEnded={handleEnded}
+        onPlay={() => {
+          setIsPlaying(true);
+          onTogglePlay?.(true);
+        }}
+        onPause={() => {
+          setIsPlaying(false);
+          onTogglePlay?.(false);
+        }}
+        preload="metadata"
+      />
     </div>
   );
 }

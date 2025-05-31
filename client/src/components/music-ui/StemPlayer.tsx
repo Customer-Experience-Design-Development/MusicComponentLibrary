@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Track, AudioSource } from '@/types/music';
 import { formatTime } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { VolumeControl } from './VolumeControl';
+import { VolumeControl, StemVolumeControl } from './VolumeControl';
 import { Waveform } from './Waveform';
 import { Play, Pause, Settings } from 'lucide-react';
 import {
@@ -192,34 +192,26 @@ export function StemPlayer({
       
       <div className="flex justify-between items-center text-sm text-neutral-500 dark:text-neutral-400 mb-4">
         <span>{formatTime(currentTime)}</span>
-        <VolumeControl 
-          initialVolume={masterVolume} 
-          onChange={handleMasterVolumeChange}
-        />
+        <div className="w-32">
+          <VolumeControl 
+            initialVolume={masterVolume} 
+            onChange={handleMasterVolumeChange}
+          />
+        </div>
         <span>{formatTime(duration)}</span>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
+        <h4 className="text-sm font-semibold text-gray-900 dark:text-white">Individual Stems</h4>
         {stemStates.map((stem) => (
-          <div key={stem.name} className="flex items-center space-x-4">
-            <div className="w-24">
-              <Label className="text-sm">{stem.name}</Label>
-            </div>
-            <div className="flex-1">
-              <Slider
-                value={[stem.volume]}
-                min={0}
-                max={100}
-                step={1}
-                onValueChange={(value) => handleStemVolumeChange(stem.name, value[0])}
-              />
-            </div>
-            <Switch
-              checked={!stem.muted}
-              onCheckedChange={() => toggleStemMute(stem.name)}
-              className="ml-2"
-            />
-          </div>
+          <StemVolumeControl
+            key={stem.name}
+            name={stem.name}
+            volume={stem.volume}
+            muted={stem.muted}
+            onVolumeChange={(volume) => handleStemVolumeChange(stem.name, volume)}
+            onMuteToggle={() => toggleStemMute(stem.name)}
+          />
         ))}
       </div>
     </div>

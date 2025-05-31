@@ -4,13 +4,15 @@ export { Equalizer } from './Equalizer';
 export { MediaCard } from './MediaCard';
 export { Playlist } from './Playlist';
 export { Visualizer } from './Visualizer';
-export { VolumeControl } from './VolumeControl';
+export { VolumeControl, StemVolumeControl } from './VolumeControl';
 export { Waveform } from './Waveform';
 export { TimelineComments } from './TimelineComments';
 export { SongLyrics } from './SongLyrics';
 export { StemPlayer } from './StemPlayer';
 export { MashupCreator } from './MashupCreator';
 export { MobileMashupCreator } from './MobileMashupCreator';
+export { SocialMusicFeed } from './SocialMusicFeed';
+export { MobileDJController } from './MobileDJController';
 
 // New Components
 export { MiniPlayer } from './MiniPlayer';
