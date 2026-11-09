@@ -123,7 +123,8 @@ app.use((req, res, next) => {
   server.listen({
     port,
     host: "0.0.0.0",
-    reusePort: true,
+    // SO_REUSEPORT on 0.0.0.0 fails with ENOTSUP on macOS; only Replit needs it.
+    reusePort: isReplit,
   }, () => {
     log(`Server running in ${app.get("env")} mode`);
     log(`Serving on port ${port}`);
