@@ -11,6 +11,10 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {
+        // Editorial (Liner notes) tokens shared with my-music-label-app DESIGN.md
+        paper: "hsl(var(--paper))",
+        ink: { DEFAULT: "hsl(var(--ink))", subtle: "hsl(var(--ink-subtle))" },
+        mark: "hsl(var(--mark))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {

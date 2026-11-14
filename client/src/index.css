@@ -4,103 +4,112 @@
 
 @layer base {
   :root {
-    /* Default light theme variables */
+    /* Aligned with Music Label OS DESIGN.md (my-music-label-app): one indigo
+       action colour, ink/paper neutrals, amber marks. Keep the two in step. */
     --background: 0 0% 100%;
-    --foreground: 20 14.3% 4.1%;
-    
+    --foreground: 222 47% 11%;          /* ink #0F172A */
+
     --card: 0 0% 100%;
-    --card-foreground: 20 14.3% 4.1%;
-    
+    --card-foreground: 222 47% 11%;
+
     --popover: 0 0% 100%;
-    --popover-foreground: 20 14.3% 4.1%;
-    
-    --primary: 275 100% 46%; /* #6200EA - Primary purple */
-    --primary-foreground: 211 100% 99%;
-    
-    --secondary: 145 100% 39%; /* #00C853 - Secondary green */
-    --secondary-foreground: 0 0% 100%;
-    
-    --accent: 16 100% 50%; /* #FF3D00 - Accent orange */
-    --accent-foreground: 0 0% 100%;
-    
-    --muted: 60 4.8% 95.9%;
-    --muted-foreground: 25 5.3% 44.7%;
-    
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 60 9.1% 97.8%;
-    
-    --border: 20 5.9% 90%;
-    --input: 20 5.9% 90%;
-    --ring: 275 100% 46%;
-    
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 244 58% 51%;             /* action-primary indigo-700 #4338CA */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 40 14% 95%;            /* paper-adjacent neutral surface */
+    --secondary-foreground: 222 47% 11%;
+
+    --accent: 40 12% 92%;               /* hover/selected neutral, never a brand colour */
+    --accent-foreground: 222 47% 11%;
+
+    --muted: 40 14% 96%;
+    --muted-foreground: 30 5% 32%;      /* ink-subtle stone-600 #57534E */
+
+    --destructive: 0 72% 51%;           /* feedback-danger red-600 */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 244 58% 51%;
+
     --radius: 0.5rem;
-    
-    /* Chart colors */
-    --chart-1: 275 100% 46%;
-    --chart-2: 145 100% 39%;
-    --chart-3: 16 100% 50%;
-    --chart-4: 217 91% 54%;
-    --chart-5: 338 85% 56%;
-    
+
+    /* Editorial (Liner notes) */
+    --paper: 40 20% 96%;                /* #F8F7F4 */
+    --ink: 222 47% 11%;
+    --ink-subtle: 30 5% 32%;
+    --mark: 26 90% 37%;                 /* amber-700 #B45309, marks only, never text */
+
+    /* Chart colours: app chart-1..5 (indigo, emerald, amber, rose, sky) */
+    --chart-1: 239 84% 67%;
+    --chart-2: 160 84% 39%;
+    --chart-3: 38 92% 50%;
+    --chart-4: 350 89% 60%;
+    --chart-5: 199 89% 48%;
+
     /* Sidebar theme */
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 20 14.3% 4.1%;
-    --sidebar-primary: 275 100% 46%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 244 58% 51%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 60 4.8% 95.9%;
-    --sidebar-accent-foreground: 24 9.8% 10%;
-    --sidebar-border: 20 5.9% 90%;
-    --sidebar-ring: 20 14.3% 4.1%;
+    --sidebar-accent: 40 12% 92%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 244 58% 51%;
   }
-  
+
   .dark {
-    /* Dark theme variables */
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    
-    --primary: 275 100% 50%; /* Slightly brighter in dark mode */
+    --background: 222 47% 11%;          /* indigo-deep #0F172A */
+    --foreground: 210 40% 96%;          /* #F1F5F9 */
+
+    --card: 223 45% 16%;                /* #16203A */
+    --card-foreground: 210 40% 96%;
+
+    --popover: 223 45% 16%;
+    --popover-foreground: 210 40% 96%;
+
+    --primary: 243 75% 59%;             /* action-primary dark, indigo-600 #4F46E5 */
     --primary-foreground: 0 0% 100%;
-    
-    --secondary: 145 100% 42%; /* Slightly brighter in dark mode */
-    --secondary-foreground: 0 0% 100%;
-    
-    --accent: 16 100% 55%; /* Slightly brighter in dark mode */
-    --accent-foreground: 0 0% 100%;
-    
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 275 100% 46%;
-    
-    /* Chart colors - brighter in dark mode */
-    --chart-1: 275 100% 60%;
-    --chart-2: 145 100% 45%;
-    --chart-3: 16 100% 60%;
-    --chart-4: 217 91% 60%;
-    --chart-5: 338 85% 64%;
-    
-    /* Sidebar theme */
-    --sidebar-background: 240 10% 3.9%;
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 275 100% 50%;
+
+    --secondary: 217 33% 20%;
+    --secondary-foreground: 210 40% 96%;
+
+    --accent: 217 33% 22%;
+    --accent-foreground: 210 40% 96%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 213 27% 84%;    /* ink-subtle dark, slate-300 */
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 217 19% 27%;
+    --input: 217 19% 27%;
+    --ring: 243 75% 59%;
+
+    --paper: 223 45% 16%;
+    --ink: 210 40% 96%;
+    --ink-subtle: 213 27% 84%;
+    --mark: 43 96% 56%;                 /* amber-400 */
+
+    --chart-1: 234 89% 74%;
+    --chart-2: 158 64% 52%;
+    --chart-3: 43 96% 56%;
+    --chart-4: 351 95% 71%;
+    --chart-5: 198 93% 60%;
+
+    --sidebar-background: 222 47% 11%;
+    --sidebar-foreground: 210 40% 96%;
+    --sidebar-primary: 243 75% 59%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 240 4.9% 83.9%;
+    --sidebar-accent: 217 33% 22%;
+    --sidebar-accent-foreground: 210 40% 96%;
+    --sidebar-border: 217 19% 27%;
+    --sidebar-ring: 243 75% 59%;
   }
-  
+
   * {
     @apply border-border;
   }
